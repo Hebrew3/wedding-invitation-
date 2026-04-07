@@ -6,15 +6,15 @@ import '../styles/magazine.css'
 export default function MagazineApp() {
   const [open, setOpen] = useState(false)
   const audioRef = useRef(null)
-  const loveParticles = Array.from({ length: 28 }, (_, idx) => {
-    const symbols = ['❤', '♡', '❣', '❥', '✦', '✧']
+  const loveParticles = Array.from({ length: 42 }, (_, idx) => {
+    const symbols = ['❤', '♡', '❣', '❥', '♥', '❤', '♡', '💗', '💕', '✦', '✧', '💖']
     return {
       id: idx,
       symbol: symbols[idx % symbols.length],
       tier: idx % 3 === 0 ? 'lg' : idx % 2 === 0 ? 'md' : 'sm',
-      left: (idx * 11 + 5) % 100,
-      delay: idx * 0.45,
-      duration: 9 + (idx % 6) * 1.7,
+      left: (idx * 7 + 3) % 100,
+      delay: idx * 0.38,
+      duration: 8.5 + (idx % 7) * 1.55,
     }
   })
 
@@ -35,24 +35,22 @@ export default function MagazineApp() {
 
   return (
     <div className="magazine-root magazine-shell">
-      {/* Floating hearts/sparkles only on the closed cover */}
-      {!open && (
-        <div className="love-layer is-cover" aria-hidden>
-          {loveParticles.map((particle) => (
-            <span
-              key={`love-${particle.id}`}
-              className={`love-particle ${particle.tier}`}
-              style={{
-                left: `${particle.left}%`,
-                animationDelay: `${particle.delay}s`,
-                animationDuration: `${particle.duration}s`,
-              }}
-            >
-              {particle.symbol}
-            </span>
-          ))}
-        </div>
-      )}
+      {/* Floating hearts — full app (cover + invitation); pointer-events none, below modals */}
+      <div className={`love-layer ${open ? 'is-open' : 'is-cover'}`} aria-hidden>
+        {loveParticles.map((particle) => (
+          <span
+            key={`love-${particle.id}`}
+            className={`love-particle ${particle.tier}`}
+            style={{
+              left: `${particle.left}%`,
+              animationDelay: `${particle.delay}s`,
+              animationDuration: `${particle.duration}s`,
+            }}
+          >
+            {particle.symbol}
+          </span>
+        ))}
+      </div>
 
       <audio
         ref={audioRef}

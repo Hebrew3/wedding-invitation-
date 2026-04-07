@@ -26,7 +26,8 @@ html,body,#root{
   min-height:100dvh;
 }
 
-.magazine-root{color:var(--ink);position:relative;overflow-x:hidden;width:100%;min-width:0}
+/* clip avoids horizontal bleed without forcing overflow-y:auto (see .magazine) */
+.magazine-root{color:var(--ink);position:relative;overflow-x:clip;overflow-y:visible;width:100%;min-width:0}
 .magazine-root{min-height:100vh;min-height:100dvh}
 
 /* Full-bleed children never widen past viewport */
@@ -360,18 +361,20 @@ html,body,#root{
 .magazine-root .reveal-content{opacity:0;transform:translateY(12px);transition:opacity .6s ease,transform .6s ease}
 .magazine-root.opened .reveal-content{opacity:1;transform:none}
 
-/* Floating love particles on entrance and opened view */
+/* Floating love particles — entire experience (cover + magazine); never block clicks */
 .love-layer{
   position:fixed;
   inset:0;
   pointer-events:none;
   overflow:hidden;
-  z-index:2;
+  z-index:6;
 }
 .love-particle{
   position:absolute;
   bottom:-8vh;
-  color:rgba(183,159,122,0.34);
+  pointer-events:none;
+  user-select:none;
+  color:rgba(183,159,122,0.36);
   font-size:clamp(14px,1.8vw,24px);
   filter:drop-shadow(0 2px 6px rgba(0,0,0,0.08));
   animation-name:floatLove;
@@ -381,7 +384,14 @@ html,body,#root{
 .love-particle.sm{font-size:clamp(11px,1.2vw,16px)}
 .love-particle.md{font-size:clamp(14px,1.8vw,24px)}
 .love-particle.lg{font-size:clamp(18px,2.4vw,30px)}
-.love-layer.is-cover .love-particle{opacity:0.7}
+.love-layer.is-cover .love-particle{opacity:0.72}
+.love-layer.is-open .love-particle{
+  opacity:0.42;
+  filter:drop-shadow(0 2px 5px rgba(0,0,0,0.06));
+}
+.love-layer.is-open .love-particle:nth-child(3n){color:rgba(200,120,130,0.32)}
+.love-layer.is-open .love-particle:nth-child(3n+1){color:rgba(183,159,122,0.3)}
+.love-layer.is-open .love-particle:nth-child(3n+2){color:rgba(150,170,155,0.26)}
 
 /* Main magazine layout (opened invitation) */
 .magazine{
@@ -393,7 +403,6 @@ html,body,#root{
   border:1px solid rgba(17,17,15,0.1);
   border-radius:clamp(0px,1.5vw,2px);
   box-sizing:border-box;
-  overflow-x:hidden;
   background:
     linear-gradient(180deg,rgba(255,255,255,0.97) 0%,#fffcf7 40%,#faf8f4 100%);
   box-shadow:
@@ -401,6 +410,8 @@ html,body,#root{
     0 1px 0 rgba(183,159,122,0.12),
     0 28px 56px rgba(17,17,15,0.08),
     0 0 80px rgba(183,159,122,0.06);
+  overflow-x:clip;
+  overflow-y:visible;
 }
 /* Default: never let content images spill past the column */
 .magazine img{max-width:100%}

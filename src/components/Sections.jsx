@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import PhotoFullscreen, {
   IconChevronLeft,
   IconChevronRight,
@@ -92,7 +93,60 @@ export default function Sections() {
     return () => obs.disconnect()
   }, [])
 
+  const lightboxNode =
+    lightboxOpen &&
+    createPortal(
+      <div className="lightbox" role="dialog" aria-modal="true" onClick={closeLightbox}>
+        <button
+          type="button"
+          className="lightbox-close lightbox-fab"
+          onClick={closeLightbox}
+          aria-label="Close gallery"
+        >
+          <IconClose className="lightbox-fab__icon" />
+          <span className="lightbox-fab__text">Close</span>
+        </button>
+        <button
+          type="button"
+          className="lightbox-prev lightbox-fab lightbox-fab--round"
+          onClick={(e) => {
+            e.stopPropagation()
+            showPrev()
+          }}
+          aria-label="Previous image"
+        >
+          <IconChevronLeft className="lightbox-fab__icon" />
+        </button>
+        <div className="lightbox-inner" onClick={(e) => e.stopPropagation()}>
+          <img src={galleryAssets[lightboxIndex]} alt={`Gallery ${lightboxIndex + 1}`} />
+        </div>
+        <button
+          type="button"
+          className="lightbox-next lightbox-fab lightbox-fab--round"
+          onClick={(e) => {
+            e.stopPropagation()
+            showNext()
+          }}
+          aria-label="Next image"
+        >
+          <IconChevronRight className="lightbox-fab__icon" />
+        </button>
+      </div>,
+      document.body
+    )
+
+  const photoFullscreenPortal = createPortal(
+    <PhotoFullscreen
+      open={Boolean(fsPhoto)}
+      src={fsPhoto?.src}
+      alt={fsPhoto?.alt}
+      onClose={closeFullscreen}
+    />,
+    document.body
+  )
+
   return (
+    <>
     <main className="magazine">
       <section className="cover-spread">
         <header className="masthead">
@@ -508,52 +562,10 @@ export default function Sections() {
           ) : null}
         </div>
 
-        {lightboxOpen && (
-          <div className="lightbox" role="dialog" aria-modal="true" onClick={closeLightbox}>
-            <button
-              type="button"
-              className="lightbox-close lightbox-fab"
-              onClick={closeLightbox}
-              aria-label="Close gallery"
-            >
-              <IconClose className="lightbox-fab__icon" />
-              <span className="lightbox-fab__text">Close</span>
-            </button>
-            <button
-              type="button"
-              className="lightbox-prev lightbox-fab lightbox-fab--round"
-              onClick={(e) => {
-                e.stopPropagation()
-                showPrev()
-              }}
-              aria-label="Previous image"
-            >
-              <IconChevronLeft className="lightbox-fab__icon" />
-            </button>
-            <div className="lightbox-inner" onClick={(e) => e.stopPropagation()}>
-              <img src={galleryAssets[lightboxIndex]} alt={`Gallery ${lightboxIndex + 1}`} />
-            </div>
-            <button
-              type="button"
-              className="lightbox-next lightbox-fab lightbox-fab--round"
-              onClick={(e) => {
-                e.stopPropagation()
-                showNext()
-              }}
-              aria-label="Next image"
-            >
-              <IconChevronRight className="lightbox-fab__icon" />
-            </button>
-          </div>
-        )}
-
-        <PhotoFullscreen
-          open={Boolean(fsPhoto)}
-          src={fsPhoto?.src}
-          alt={fsPhoto?.alt}
-          onClose={closeFullscreen}
-        />
       </section>
     </main>
+    {lightboxNode}
+    {photoFullscreenPortal}
+    </>
   )
 }
