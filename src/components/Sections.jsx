@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import dayjs from 'dayjs'
+import PhotoFullscreen, {
+  IconChevronLeft,
+  IconChevronRight,
+  IconClose,
+  IconExpand,
+  IconRotate,
+} from './PhotoFullscreen'
 import photoCover from '../assets/DSC_7496.jpg'
 import photoStory from '../assets/DSC_7091.jpg'
 import photoFactsMain from '../assets/DSC_7517.jpg'
@@ -7,31 +13,7 @@ import photoThumbOne from '../assets/DSC_7456.jpg'
 import photoThumbTwo from '../assets/DSC_7353.jpg'
 import photoThumbThree from '../assets/DSC_7091.jpg'
 
-function Countdown({ date }) {
-  const [now, setNow] = useState(dayjs())
-  useEffect(() => {
-    const t = setInterval(() => setNow(dayjs()), 1000)
-    return () => clearInterval(t)
-  }, [])
-  const diff = dayjs(date).diff(now)
-  const d = Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)))
-  const h = Math.max(0, dayjs(date).diff(now, 'hour') % 24)
-  const m = Math.max(0, dayjs(date).diff(now, 'minute') % 60)
-  const s = Math.max(0, dayjs(date).diff(now, 'second') % 60)
-  return (
-    <div className="countdown">
-      <span>{d}d</span>
-      <span>{h}h</span>
-      <span>{m}m</span>
-      <span>{s}s</span>
-    </div>
-  )
-}
-
-// RSVP form removed per request; keep RSVP link in footer if needed
-
 export default function Sections() {
-  const weddingDate = '2026-09-12T09:00:00'
   const galleryAssets = window.__GALLERY_ASSETS__?.slice(0, 12) || []
 
   useEffect(() => {
@@ -52,6 +34,12 @@ export default function Sections() {
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState(0)
   const [rotated, setRotated] = useState(false)
+  const [fsPhoto, setFsPhoto] = useState(null)
+
+  const openFullscreen = useCallback((src, alt) => {
+    setFsPhoto({ src, alt: alt || 'Wedding photo' })
+  }, [])
+  const closeFullscreen = useCallback(() => setFsPhoto(null), [])
 
   // Open lightbox at index
   function openLightbox(index) {
@@ -71,9 +59,9 @@ export default function Sections() {
     setLightboxIndex((i) => (i + 1) % (galleryAssets.length || 1))
   }, [galleryAssets.length])
 
-  // Keyboard navigation for lightbox
+  // Keyboard navigation for lightbox (full-screen viewer handles its own Escape + scroll lock)
   useEffect(() => {
-    if (!lightboxOpen) return
+    if (!lightboxOpen || fsPhoto) return
     document.body.style.overflow = 'hidden'
     const onKey = (e) => {
       if (e.key === 'Escape') closeLightbox()
@@ -85,7 +73,7 @@ export default function Sections() {
       document.body.style.overflow = ''
       window.removeEventListener('keydown', onKey)
     }
-  }, [lightboxOpen, showNext, showPrev])
+  }, [lightboxOpen, fsPhoto, showNext, showPrev])
 
   // Lazy-load gallery images with IntersectionObserver
   useEffect(() => {
@@ -174,9 +162,27 @@ export default function Sections() {
             <div className={`photo-wrap ${rotated ? 'rotated' : ''}`}>
               <img src={photoCover} alt="Couple portrait on the invitation cover" />
 
-              <div className="photo-controls">
-                <button className="ctrl" onClick={() => setRotated((r) => !r)} aria-label="Rotate photo">⤾</button>
-                <button className="ctrl" title="Drag to move" aria-label="Move photo">✥</button>
+              <div className="photo-toolbar" role="toolbar" aria-label="Photo actions">
+                <button
+                  type="button"
+                  className="photo-tool"
+                  onClick={() =>
+                    openFullscreen(photoCover, 'Couple portrait on the invitation cover')
+                  }
+                >
+                  <IconExpand className="photo-tool__icon" />
+                  <span className="photo-tool__label">Full screen</span>
+                </button>
+                <button
+                  type="button"
+                  className="photo-tool"
+                  onClick={() => setRotated((r) => !r)}
+                  aria-pressed={rotated}
+                  aria-label="Tilt photo"
+                >
+                  <IconRotate className="photo-tool__icon" />
+                  <span className="photo-tool__label">Tilt</span>
+                </button>
               </div>
             </div>
 
@@ -283,24 +289,47 @@ export default function Sections() {
         </aside>
 
         <div className="timeline" aria-hidden>
-          <div className="program-photo">
+          <div className="program-photo photo-expandable">
             <img src={photoStory} alt="Couple portrait for the program section" className="program-photo-image" />
+            <button
+              type="button"
+              className="photo-expand-btn"
+              onClick={() =>
+                openFullscreen(photoStory, 'Couple portrait for the program section')
+              }
+              aria-label="View program photo full screen"
+            >
+              <IconExpand className="photo-expand-btn__icon" />
+              <span className="photo-expand-btn__text">Full screen</span>
+            </button>
           </div>
 
           <div className="story story-spaced">
-            <article>
+            <article className="story-article">
               <h3 className="story-title">Our Love Story</h3>
-              <p className="dropcap">I</p>
-              <p className="lead">n the hallways of high school, they were gray—mere shadows passing in the mist. They shared the same air and the same bells, yet their names remained unwritten, like white ink on a blank page. For years, they were two parallel lines traveling through the world, never realizing that fate was simply waiting for the ink to dry before drawing them together.</p>
-              <p className="body-text">And then boom! the universe finally chose its stage: a gas station, a place defined by transition and fleeting stops. Ericson stood grounded in the brown grit of daily labor, while Mary Diana arrived like a flicker of yellow sunshine on a motor she was still learning to tame. In that moment, the world narrowed. As Ericson gazed at her face, the "crude oil"—precious and costly in the world of men—became secondary to the gold he found in her eyes. The fuel overflowed, spilling onto the metal of her bike. It was a figurative mess that cleared the way; a liquid bridge between two strangers. The gas was expensive, but the distraction was priceless!</p>
+              <p className="lead story-opening">
+                <span className="dropcap">I</span>n the hallways of high school, they were gray—mere shadows passing in the mist. They shared the same air and the same bells, yet their names remained unwritten, like white ink on a blank page. For years, they were two parallel lines traveling through the world, never realizing that fate was simply waiting for the ink to dry before drawing them together.
+              </p>
+              <p className="body-text">
+                And then boom! the universe finally chose its stage: a gas station, a place defined by transition and fleeting stops. Ericson stood grounded in the brown grit of daily labor, while Mary Diana arrived like a flicker of yellow sunshine on a motor she was still learning to tame. In that moment, the world narrowed. As Ericson gazed at her face, the &quot;crude oil&quot;—precious and costly in the world of men—became secondary to the gold he found in her eyes. The fuel overflowed, spilling onto the metal of her bike. It was a figurative mess that cleared the way; a liquid bridge between two strangers. The gas was expensive, but the distraction was priceless!
+              </p>
             </article>
           </div>
 
           {/* Couple facts block: large image left, facts and thumbnails right */}
           <div className="couple-facts">
             <div className="facts-grid">
-              <div className="facts-left">
+              <div className="facts-left photo-expandable">
                 <img src={photoFactsMain} alt="Couple portrait" />
+                <button
+                  type="button"
+                  className="photo-expand-btn"
+                  onClick={() => openFullscreen(photoFactsMain, 'Couple portrait')}
+                  aria-label="View portrait full screen"
+                >
+                  <IconExpand className="photo-expand-btn__icon" />
+                  <span className="photo-expand-btn__text">Full screen</span>
+                </button>
               </div>
 
               <div className="facts-right">
@@ -314,9 +343,30 @@ export default function Sections() {
                 </ul>
 
                 <div className="thumb-row">
-                  <img src={photoThumbOne} alt="Couple moment one" />
-                  <img src={photoThumbTwo} alt="Couple moment two" />
-                  <img src={photoThumbThree} alt="Couple moment three" />
+                  <button
+                    type="button"
+                    className="thumb-expand"
+                    onClick={() => openFullscreen(photoThumbOne, 'Couple moment one')}
+                    aria-label="View couple moment one full screen"
+                  >
+                    <img src={photoThumbOne} alt="" />
+                  </button>
+                  <button
+                    type="button"
+                    className="thumb-expand"
+                    onClick={() => openFullscreen(photoThumbTwo, 'Couple moment two')}
+                    aria-label="View couple moment two full screen"
+                  >
+                    <img src={photoThumbTwo} alt="" />
+                  </button>
+                  <button
+                    type="button"
+                    className="thumb-expand"
+                    onClick={() => openFullscreen(photoThumbThree, 'Couple moment three')}
+                    aria-label="View couple moment three full screen"
+                  >
+                    <img src={photoThumbThree} alt="" />
+                  </button>
                 </div>
               </div>
             </div>
@@ -350,8 +400,17 @@ export default function Sections() {
             </li>
           </ul>
         </div>
-        <div className="milestones-right">
+        <div className="milestones-right photo-expandable">
           <img src={photoThumbThree} alt="Couple by the windmill" />
+          <button
+            type="button"
+            className="photo-expand-btn"
+            onClick={() => openFullscreen(photoThumbThree, 'Couple by the windmill')}
+            aria-label="View photo full screen"
+          >
+            <IconExpand className="photo-expand-btn__icon" />
+            <span className="photo-expand-btn__text">Full screen</span>
+          </button>
         </div>
       </section>
 
@@ -359,30 +418,63 @@ export default function Sections() {
         <div className="quiz-left">
           <h3>He Said, She Said</h3>
           <p className="quiz-note">Guess whether the bride or groom made each statement.</p>
-          <table className="quiz-table">
-            <thead>
-              <tr><th>Statement</th><th>Bride</th><th>Groom</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>I made the first move.</td><td>□</td><td>□</td></tr>
-              <tr><td>I wake up earlier.</td><td>□</td><td>□</td></tr>
-              <tr><td>I said "I love you" first.</td><td>□</td><td>□</td></tr>
-              <tr><td>I am the better cook.</td><td>□</td><td>□</td></tr>
-              <tr><td>I am more organized.</td><td>□</td><td>□</td></tr>
-              <tr><td>I planned the first date.</td><td>□</td><td>□</td></tr>
-            </tbody>
-          </table>
+          <div className="quiz-table-wrap">
+            <table className="quiz-table">
+              <thead>
+                <tr><th>Statement</th><th>Bride</th><th>Groom</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>I made the first move.</td><td>□</td><td>□</td></tr>
+                <tr><td>I wake up earlier.</td><td>□</td><td>□</td></tr>
+                <tr><td>I said &quot;I love you&quot; first.</td><td>□</td><td>□</td></tr>
+                <tr><td>I am the better cook.</td><td>□</td><td>□</td></tr>
+                <tr><td>I am more organized.</td><td>□</td><td>□</td></tr>
+                <tr><td>I planned the first date.</td><td>□</td><td>□</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div className="quiz-right">
+        <div className="quiz-right photo-expandable">
           <img src={photoCover} alt="Couple portrait by the wall" />
+          <button
+            type="button"
+            className="photo-expand-btn"
+            onClick={() => openFullscreen(photoCover, 'Couple portrait by the wall')}
+            aria-label="View photo full screen"
+          >
+            <IconExpand className="photo-expand-btn__icon" />
+            <span className="photo-expand-btn__text">Full screen</span>
+          </button>
         </div>
       </section>
 
       <section className="families fade-up">
         <h3>The families that made their relationship stronger.</h3>
         <div className="family-grid">
-          <img src={photoThumbOne} alt="Family gathering one" />
-          <img src={photoThumbTwo} alt="Family gathering two" />
+          <button
+            type="button"
+            className="family-photo-tile"
+            onClick={() => openFullscreen(photoThumbOne, 'Family gathering one')}
+            aria-label="View family photo one full screen"
+          >
+            <img src={photoThumbOne} alt="" />
+            <span className="family-photo-tile__shine" aria-hidden />
+            <span className="family-photo-tile__hint">
+              <IconExpand className="family-photo-tile__hint-icon" />
+            </span>
+          </button>
+          <button
+            type="button"
+            className="family-photo-tile"
+            onClick={() => openFullscreen(photoThumbTwo, 'Family gathering two')}
+            aria-label="View family photo two full screen"
+          >
+            <img src={photoThumbTwo} alt="" />
+            <span className="family-photo-tile__shine" aria-hidden />
+            <span className="family-photo-tile__hint">
+              <IconExpand className="family-photo-tile__hint-icon" />
+            </span>
+          </button>
         </div>
       </section>
 
@@ -418,19 +510,50 @@ export default function Sections() {
 
         {lightboxOpen && (
           <div className="lightbox" role="dialog" aria-modal="true" onClick={closeLightbox}>
-            <button className="lightbox-close" onClick={closeLightbox} aria-label="Close">✕</button>
-            <button className="lightbox-prev" onClick={(e) => { e.stopPropagation(); showPrev() }} aria-label="Previous">‹</button>
+            <button
+              type="button"
+              className="lightbox-close lightbox-fab"
+              onClick={closeLightbox}
+              aria-label="Close gallery"
+            >
+              <IconClose className="lightbox-fab__icon" />
+              <span className="lightbox-fab__text">Close</span>
+            </button>
+            <button
+              type="button"
+              className="lightbox-prev lightbox-fab lightbox-fab--round"
+              onClick={(e) => {
+                e.stopPropagation()
+                showPrev()
+              }}
+              aria-label="Previous image"
+            >
+              <IconChevronLeft className="lightbox-fab__icon" />
+            </button>
             <div className="lightbox-inner" onClick={(e) => e.stopPropagation()}>
-              <img src={galleryAssets[lightboxIndex]} alt={`lightbox-${lightboxIndex}`} />
+              <img src={galleryAssets[lightboxIndex]} alt={`Gallery ${lightboxIndex + 1}`} />
             </div>
-            <button className="lightbox-next" onClick={(e) => { e.stopPropagation(); showNext() }} aria-label="Next">›</button>
+            <button
+              type="button"
+              className="lightbox-next lightbox-fab lightbox-fab--round"
+              onClick={(e) => {
+                e.stopPropagation()
+                showNext()
+              }}
+              aria-label="Next image"
+            >
+              <IconChevronRight className="lightbox-fab__icon" />
+            </button>
           </div>
         )}
-      </section>
 
-      <footer className="magazine-footer">
-        <Countdown date={weddingDate} />
-      </footer>
+        <PhotoFullscreen
+          open={Boolean(fsPhoto)}
+          src={fsPhoto?.src}
+          alt={fsPhoto?.alt}
+          onClose={closeFullscreen}
+        />
+      </section>
     </main>
   )
 }

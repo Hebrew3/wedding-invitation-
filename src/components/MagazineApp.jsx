@@ -5,7 +5,6 @@ import '../styles/magazine.css'
 
 export default function MagazineApp() {
   const [open, setOpen] = useState(false)
-  const [musicOn, setMusicOn] = useState(false)
   const audioRef = useRef(null)
   const loveParticles = Array.from({ length: 28 }, (_, idx) => {
     const symbols = ['❤', '♡', '❣', '❥', '✦', '✧']
@@ -19,22 +18,12 @@ export default function MagazineApp() {
     }
   })
 
-  useEffect(() => {
-    if (audioRef.current) {
-      if (musicOn) audioRef.current.play().catch(() => {})
-      else audioRef.current.pause()
-    }
-  }, [musicOn])
-
   function handleOpenInvitation() {
     setOpen(true)
     const audio = audioRef.current
-    if (audio) {
-      audio.currentTime = 0
-      audio.play().then(() => setMusicOn(true)).catch(() => setMusicOn(false))
-    } else {
-      setMusicOn(true)
-    }
+    if (!audio) return
+    audio.currentTime = 0
+    audio.play().catch(() => {})
   }
 
   useEffect(() => {
@@ -45,42 +34,32 @@ export default function MagazineApp() {
   }, [open])
 
   return (
-    <div className="magazine-root">
-      <div className={`love-layer ${open ? 'is-open' : 'is-cover'}`} aria-hidden>
-        {loveParticles.map((particle) => (
-          <span
-            key={`love-${particle.id}`}
-            className={`love-particle ${particle.tier}`}
-            style={{
-              left: `${particle.left}%`,
-              animationDelay: `${particle.delay}s`,
-              animationDuration: `${particle.duration}s`,
-            }}
-          >
-            {particle.symbol}
-          </span>
-        ))}
-      </div>
+    <div className="magazine-root magazine-shell">
+      {/* Floating hearts/sparkles only on the closed cover */}
+      {!open && (
+        <div className="love-layer is-cover" aria-hidden>
+          {loveParticles.map((particle) => (
+            <span
+              key={`love-${particle.id}`}
+              className={`love-particle ${particle.tier}`}
+              style={{
+                left: `${particle.left}%`,
+                animationDelay: `${particle.delay}s`,
+                animationDuration: `${particle.duration}s`,
+              }}
+            >
+              {particle.symbol}
+            </span>
+          ))}
+        </div>
+      )}
 
-      <audio ref={audioRef} src="/music.mp3" onEnded={() => setMusicOn(false)} />
-
-      <div className="music-toggle">
-        <button
-          onClick={() => {
-            const audio = audioRef.current
-            if (!audio) return
-            if (musicOn) {
-              audio.pause()
-              setMusicOn(false)
-              return
-            }
-            audio.play().then(() => setMusicOn(true)).catch(() => setMusicOn(false))
-          }}
-          aria-pressed={musicOn}
-        >
-          {musicOn ? 'Pause Music' : 'Play Music'}
-        </button>
-      </div>
+      <audio
+        ref={audioRef}
+        src={`${import.meta.env.BASE_URL}music.mp3`}
+        preload="auto"
+        playsInline
+      />
 
       {!open ? (
         <div key="cover" className="cover-wrapper fade-in">
