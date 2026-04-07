@@ -175,6 +175,8 @@ export default function Sections() {
   return (
     <>
     <main className="magazine">
+      <section className="story-page story-page--one fade-up">
+      <div className="story-page__content">
       <section className="cover-spread">
         <header className="masthead">
           <div className="masthead-left">Special Edition</div>
@@ -350,7 +352,11 @@ export default function Sections() {
           </div>
         </div>
       </section>
+      </div>
+      </section>
 
+      <section className="story-page story-page--two fade-up">
+      <div className="story-page__content">
       <section className="details fade-up">
         <aside className="sidebar">
           <h3>The Wedding Details</h3>
@@ -461,7 +467,11 @@ export default function Sections() {
           </div>
         </div>
       </section>
+      </div>
+      </section>
 
+      <section className="story-page story-page--three fade-up">
+      <div className="story-page__content">
       <section className="milestones fade-up">
         <div className="milestones-left">
           <h3>Long Story Short</h3>
@@ -535,7 +545,11 @@ export default function Sections() {
           </button>
         </div>
       </section>
+      </div>
+      </section>
 
+      <section className="story-page story-page--four fade-up">
+      <div className="story-page__content">
       <section className="families fade-up">
         <h3>The families that made their relationship stronger.</h3>
         <div className="family-grid">
@@ -577,6 +591,10 @@ export default function Sections() {
           <p>Your presence means everything to us, and we're grateful to have you with us on our special day.</p>
           <p>Your presence is a gift in itself.</p>
         </article>
+        <article className="scan-article">
+          <h3>Scan Me</h3>
+          <div className="scan-box" aria-hidden />
+        </article>
       </section>
 
       <section className="gallery fade-up">
@@ -596,6 +614,8 @@ export default function Sections() {
           ) : null}
         </div>
 
+      </section>
+      </div>
       </section>
     </main>
     {lightboxNode}
