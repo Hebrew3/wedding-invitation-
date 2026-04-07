@@ -16,6 +16,8 @@ import photoThumbThree from '../assets/DSC_7091.jpg'
 
 export default function Sections() {
   const galleryAssets = window.__GALLERY_ASSETS__?.slice(0, 12) || []
+  const weddingDate = new Date('2026-04-28T00:00:00')
+  const [now, setNow] = useState(() => new Date())
 
   useEffect(() => {
     const elts = Array.from(document.querySelectorAll('.fade-up'))
@@ -29,6 +31,11 @@ export default function Sections() {
     onScroll()
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    const ticker = window.setInterval(() => setNow(new Date()), 1000)
+    return () => window.clearInterval(ticker)
   }, [])
 
   // RSVP reveal removed; no showRsvp state
@@ -145,6 +152,26 @@ export default function Sections() {
     document.body
   )
 
+  const currentDateLabel = new Intl.DateTimeFormat('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(now)
+
+  const totalMs = Math.max(0, weddingDate.getTime() - now.getTime())
+  const totalSeconds = Math.floor(totalMs / 1000)
+  const days = Math.floor(totalSeconds / 86400)
+  const hours = Math.floor((totalSeconds % 86400) / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = totalSeconds % 60
+  const countdownText =
+    totalMs > 0
+      ? `${days}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m ${String(
+          seconds
+        ).padStart(2, '0')}s`
+      : 'Wedding day is here!'
+
   return (
     <>
     <main className="magazine">
@@ -152,8 +179,15 @@ export default function Sections() {
         <header className="masthead">
           <div className="masthead-left">Special Edition</div>
           <div className="masthead-title">The Wedding Post</div>
-          <div className="masthead-right">Tuesday, April 28, 2026</div>
+          <div className="masthead-right">
+            <strong className="masthead-right-target">Tuesday, April 28, 2026</strong>
+            <span className="masthead-right-date">{currentDateLabel}</span>
+          </div>
         </header>
+        <div className="masthead-countdown" aria-live="polite">
+          <span className="masthead-countdown-label">Countdown to April 28, 2026</span>
+          <strong className="masthead-countdown-time">{countdownText}</strong>
+        </div>
 
         <h1 className="cover-head">ERIC & DIANE</h1>
         <h2 className="cover-sub">Are Getting Married on April 28, 2026</h2>
