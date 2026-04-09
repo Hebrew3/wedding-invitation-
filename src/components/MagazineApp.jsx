@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Cover from './Cover'
 import Sections from './Sections'
+import Navbar from './Navbar'
 import '../styles/magazine.css'
 
 export default function MagazineApp() {
@@ -113,6 +114,7 @@ export default function MagazineApp() {
         </div>
       ) : (
         <div key="magazine" className="magazine-wrapper fade-in">
+          {phase === 'open' ? <Navbar /> : null}
           <Sections />
         </div>
       )}

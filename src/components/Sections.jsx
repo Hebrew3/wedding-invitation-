@@ -176,7 +176,7 @@ export default function Sections() {
   return (
     <>
     <main className="magazine">
-      <section className="story-page story-page--one fade-up">
+  <section id="cover" className="story-page story-page--one fade-up">
       <div className="story-page__content">
       <section className="cover-spread">
         <header className="masthead">
@@ -295,11 +295,8 @@ export default function Sections() {
                 <h4>BRIDE'S MAID</h4>
                 <p className="name">Elleah Kate D. Tegio</p>
 
-                <h5>BIBLE BEARER</h5>
+                <h4>BIBLE BEARER</h4>
                 <p className="name">Kian Pulot</p>
-
-                <h5>COIN BEARER</h5>
-                <p className="name">Marcus Ethan C. Reyes</p>
               </div>
 
               <div className="party-col center">
@@ -315,6 +312,9 @@ export default function Sections() {
 
                 <h4>RING BEARER</h4>
                 <p className="name">Kyden Yuan Venzon</p>
+
+                <h4>COIN BEARER</h4>
+                <p className="name">Marcus Ethan C. Reyes</p>
               </div>
 
               <div className="party-col right">
@@ -356,7 +356,7 @@ export default function Sections() {
       </div>
       </section>
 
-      <section className="story-page story-page--two fade-up">
+  <section id="details" className="story-page story-page--two fade-up">
       <div className="story-page__content">
       <section className="details fade-up">
         <aside className="sidebar">
@@ -471,7 +471,7 @@ export default function Sections() {
       </div>
       </section>
 
-      <section className="story-page story-page--three fade-up">
+  <section id="milestones" className="story-page story-page--three fade-up">
       <div className="story-page__content">
       <section className="milestones fade-up">
         <div className="milestones-left">
@@ -549,7 +549,7 @@ export default function Sections() {
       </div>
       </section>
 
-      <section className="story-page story-page--four fade-up">
+  <section id="families" className="story-page story-page--four fade-up">
       <div className="story-page__content">
       <section className="families fade-up">
         <h3>The families that made their relationship stronger.</h3>
@@ -595,7 +595,7 @@ export default function Sections() {
         
       </section>
 
-      <section className="gallery fade-up">
+  <section id="gallery" className="gallery fade-up">
         <h3>Gallery Highlights</h3>
         {/* Wedding video embedded from Google Drive */}
         <div className="video-section" style={{ margin: '1.25rem 0' }}>
