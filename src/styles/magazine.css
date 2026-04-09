@@ -261,6 +261,24 @@ html{scroll-snap-type:y proximity}
 @media (max-width:720px){
   .magazine-wrapper{padding-top:72px}
 }
+.site-nav__backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.28);z-index:1500}
+
+/* Mobile: keep navbar visible, but let the opened menu push content instead of overlaying */
+@media (max-width:720px){
+  /* ensure nav is fixed and above content */
+  .site-nav{position:fixed;left:0;right:0;top:0;z-index:1600}
+  .site-nav__inner{max-width:100%;margin:0;padding:10px 12px}
+
+  /* when menu opens, display it inline inside the nav (stacked) instead of absolute overlay */
+  .site-nav__links{display:none}
+  .site-nav__links.is-open{display:flex;flex-direction:column;position:relative;left:0;right:0;top:0;background:transparent;padding:8px;margin-top:8px;border-radius:0;box-shadow:none}
+  .site-nav__links.is-open .site-nav__link{padding:10px 8px;border-bottom:1px solid var(--rule);color:var(--ink);background:#fff;border-radius:8px}
+  .site-nav__links.is-open .site-nav__link:last-child{border-bottom:0}
+
+  /* reduce burger and link sizes for small screens */
+  .site-nav__burger{display:inline-block}
+  .site-nav__link{font-size:13px;padding:6px 8px}
+}
 .magazine-title{
   position:relative;
   z-index:4;

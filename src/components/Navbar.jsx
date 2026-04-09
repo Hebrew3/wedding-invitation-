@@ -14,13 +14,33 @@ export default function Navbar() {
 
   const [active, setActive] = useState('cover')
   const [isOpen, setIsOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== 'undefined' && window.matchMedia
+      ? window.matchMedia('(max-width:720px)').matches
+      : false
+  )
 
-  // close on Escape and lock body scroll when mobile menu is open
+  // track small screen state so behavior differs between desktop and mobile
+  useEffect(() => {
+    if (!window.matchMedia) return undefined
+    const mq = window.matchMedia('(max-width:720px)')
+    const handler = (e) => setIsMobile(e.matches)
+    // modern API
+    if (mq.addEventListener) mq.addEventListener('change', handler)
+    else mq.addListener(handler)
+    return () => {
+      if (mq.removeEventListener) mq.removeEventListener('change', handler)
+      else mq.removeListener(handler)
+    }
+  }, [])
+
+  // close on Escape and lock body scroll when desktop menu is open
   useEffect(() => {
     function onKey(e) {
       if (e.key === 'Escape') setIsOpen(false)
     }
-    if (isOpen) {
+    // only lock body scroll on non-mobile so mobile menu can push content
+    if (isOpen && !isMobile) {
       document.body.style.overflow = 'hidden'
       window.addEventListener('keydown', onKey)
     } else {
@@ -30,7 +50,7 @@ export default function Navbar() {
       document.body.style.overflow = ''
       window.removeEventListener('keydown', onKey)
     }
-  }, [isOpen])
+  }, [isOpen, isMobile])
 
   useEffect(() => {
     const sections = links
@@ -98,7 +118,10 @@ export default function Navbar() {
             </a>
           ))}
         </div>
-        {isOpen && <div className="site-nav__backdrop" onClick={() => setIsOpen(false)} aria-hidden />}
+        {/* backdrop only on non-mobile where menu overlays content */}
+        {isOpen && !isMobile && (
+          <div className="site-nav__backdrop" onClick={() => setIsOpen(false)} aria-hidden />
+        )}
       </div>
     </nav>
   )
