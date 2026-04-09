@@ -45,8 +45,28 @@ export default function MagazineApp() {
     const audio = audioRef.current
     if (!audio) return
     audio.currentTime = 0
-    audio.play().catch(() => {})
+    audio.play().catch((err) => {
+      // ignore play errors (autoplay policy); log in dev
+      // eslint-disable-next-line no-console
+      console.debug('audio.play failed', err)
+    })
   }, [phase])
+
+  // Pause background audio when an in-page video is played
+  useEffect(() => {
+    function onVideoPlay() {
+      const audio = audioRef.current
+      if (!audio) return
+      try {
+        audio.pause()
+      } catch (err) {
+        // ignore pause errors but log in dev
+        console.debug('audio.pause failed', err)
+      }
+    }
+    window.addEventListener('app:video-play', onVideoPlay)
+    return () => window.removeEventListener('app:video-play', onVideoPlay)
+  }, [])
 
   useEffect(() => {
     const root = document.querySelector('.magazine-root')

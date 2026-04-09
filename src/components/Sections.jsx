@@ -5,7 +5,6 @@ import PhotoFullscreen, {
   IconChevronRight,
   IconClose,
   IconExpand,
-  IconRotate,
 } from './PhotoFullscreen'
 import photoCover from '../assets/DSC_7940.jpg'
 import photoStory from '../assets/DSC_7091.jpg'
@@ -52,7 +51,7 @@ export default function Sections() {
   // RSVP reveal removed; no showRsvp state
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState(0)
-  const [rotated, setRotated] = useState(false)
+  // rotated state removed since toolbar controls were removed
   const [fsPhoto, setFsPhoto] = useState(null)
 
   const openFullscreen = useCallback((src, alt) => {
@@ -94,9 +93,13 @@ export default function Sections() {
     }
   }, [lightboxOpen, fsPhoto, showNext, showPrev])
 
-  // Lazy-load gallery images with IntersectionObserver
+  // Lazy-load gallery, highlight and carousel images with IntersectionObserver
   useEffect(() => {
-    const imgs = Array.from(document.querySelectorAll('.gallery-item img[data-src]'))
+    const imgs = Array.from(
+      document.querySelectorAll(
+        '.gallery-item img[data-src], .highlight-item img[data-src], .carousel-slide img[data-src]'
+      )
+    )
     if (!imgs.length) return
     const obs = new IntersectionObserver((entries, observer) => {
       entries.forEach((entry) => {
@@ -260,31 +263,10 @@ export default function Sections() {
           </aside>
 
           <div className="cover-photo">
-            <div className={`photo-wrap ${rotated ? 'rotated' : ''}`}>
+            <div className="photo-wrap">
               <img src={photoCover} alt="Couple portrait on the invitation cover" />
 
-              <div className="photo-toolbar" role="toolbar" aria-label="Photo actions">
-                <button
-                  type="button"
-                  className="photo-tool"
-                  onClick={() =>
-                    openFullscreen(photoCover, 'Couple portrait on the invitation cover')
-                  }
-                >
-                  <IconExpand className="photo-tool__icon" />
-                  <span className="photo-tool__label">Full screen</span>
-                </button>
-                <button
-                  type="button"
-                  className="photo-tool"
-                  onClick={() => setRotated((r) => !r)}
-                  aria-pressed={rotated}
-                  aria-label="Tilt photo"
-                >
-                  <IconRotate className="photo-tool__icon" />
-                  <span className="photo-tool__label">Tilt</span>
-                </button>
-              </div>
+              {/* photo-toolbar removed */}
             </div>
 
             {/* Party names spread under the cover photo (aligned to the image column) */}
