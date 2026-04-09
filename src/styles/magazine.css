@@ -226,6 +226,41 @@ html{scroll-snap-type:y proximity}
   border-radius:999px;
   background:linear-gradient(180deg,#fff,#fbf8f3);
 }
+.site-nav{position:sticky;top:12px;z-index:1400}
+.site-nav__inner{display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:1100px;margin:0 auto;padding:12px 16px;background:linear-gradient(180deg,#fff,rgba(255,255,255,0.96));border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+.site-nav__brand{font-family:'Libre Baskerville',serif;font-size:18px;color:var(--ink)}
+.site-nav__links{display:flex;gap:18px;align-items:center}
+.site-nav__link{color:var(--muted);text-decoration:none;padding:8px 10px;border-radius:6px}
+.site-nav__link.active{background:var(--accent);color:#fff}
+
+/* Burger button (hidden on desktop) */
+.site-nav__burger{display:none;background:transparent;border:0;padding:8px;cursor:pointer}
+.burger-box{display:inline-block;position:relative;width:28px;height:18px}
+.burger-line{position:absolute;left:0;right:0;height:2px;background:#2c2824;border-radius:2px;transition:transform .25s ease,opacity .2s}
+.burger-line:nth-child(1){top:0}
+.burger-line:nth-child(2){top:8px}
+.burger-line:nth-child(3){bottom:0}
+.site-nav__burger.is-open .burger-line:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.site-nav__burger.is-open .burger-line:nth-child(2){opacity:0}
+.site-nav__burger.is-open .burger-line:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+
+/* Mobile: hide links and show burger; when open, show a vertical stacked menu */
+@media (max-width:720px){
+  /* keep navbar visible on mobile by fixing it to the top */
+  .site-nav{position:fixed;left:0;right:0;top:0;z-index:1600}
+  .site-nav__inner{max-width:100%;margin:0;padding:12px 14px}
+  .site-nav__links{display:none}
+  .site-nav__burger{display:inline-block}
+  /* mobile menu sits below the fixed nav */
+  .site-nav__links.is-open{display:flex;flex-direction:column;position:absolute;left:12px;right:12px;top:64px;background:#fff;padding:12px;border-radius:10px;box-shadow:0 18px 40px rgba(0,0,0,0.12)}
+  .site-nav__links.is-open .site-nav__link{padding:12px 10px;border-bottom:1px solid var(--rule);color:var(--ink)}
+  .site-nav__links.is-open .site-nav__link:last-child{border-bottom:0}
+}
+
+/* Give page content space so fixed navbar doesn't cover it on mobile */
+@media (max-width:720px){
+  .magazine-wrapper{padding-top:72px}
+}
 .magazine-title{
   position:relative;
   z-index:4;

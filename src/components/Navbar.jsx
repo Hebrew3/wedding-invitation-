@@ -13,6 +13,24 @@ export default function Navbar() {
   )
 
   const [active, setActive] = useState('cover')
+  const [isOpen, setIsOpen] = useState(false)
+
+  // close on Escape and lock body scroll when mobile menu is open
+  useEffect(() => {
+    function onKey(e) {
+      if (e.key === 'Escape') setIsOpen(false)
+    }
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+      window.addEventListener('keydown', onKey)
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [isOpen])
 
   useEffect(() => {
     const sections = links
@@ -47,13 +65,28 @@ export default function Navbar() {
     el.scrollIntoView({ behavior: 'smooth', block: 'start' })
     // update active immediately for snappy feedback
     setActive(id)
+    setIsOpen(false)
   }
 
   return (
     <nav className="site-nav" aria-label="Main navigation">
       <div className="site-nav__inner">
         <div className="site-nav__brand">The Wedding Post</div>
-        <div className="site-nav__links">
+
+        <button
+          className={`site-nav__burger ${isOpen ? 'is-open' : ''}`}
+          aria-expanded={isOpen}
+          aria-label={isOpen ? 'Close menu' : 'Open menu'}
+          onClick={() => setIsOpen((s) => !s)}
+        >
+          <span className="burger-box">
+            <span className="burger-line" />
+            <span className="burger-line" />
+            <span className="burger-line" />
+          </span>
+        </button>
+
+        <div className={`site-nav__links ${isOpen ? 'is-open' : ''}`}>
           {links.map((l) => (
             <a
               key={l.id}
@@ -65,6 +98,7 @@ export default function Navbar() {
             </a>
           ))}
         </div>
+        {isOpen && <div className="site-nav__backdrop" onClick={() => setIsOpen(false)} aria-hidden />}
       </div>
     </nav>
   )
