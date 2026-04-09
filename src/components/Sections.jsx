@@ -10,8 +10,8 @@ import PhotoFullscreen, {
 import photoCover from '../assets/DSC_7496.jpg'
 import photoStory from '../assets/DSC_7091.jpg'
 import photoFactsMain from '../assets/DSC_7517.jpg'
-import photoThumbOne from '../assets/DSC_7456.jpg'
-import photoThumbTwo from '../assets/DSC_7353.jpg'
+import photoThumbOne from '../assets/DSC.jpg'
+import photoThumbTwo from '../assets/DSC001.jpg'
 import photoThumbThree from '../assets/DSC_7091.jpg'
 import VideoPlayer from './VideoPlayer'
 
@@ -592,10 +592,7 @@ export default function Sections() {
           <p>Your presence means everything to us, and we're grateful to have you with us on our special day.</p>
           <p>Your presence is a gift in itself.</p>
         </article>
-        <article className="scan-article">
-          <h3>Scan Me</h3>
-          <div className="scan-box" aria-hidden />
-        </article>
+        
       </section>
 
       <section className="gallery fade-up">

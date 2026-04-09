@@ -1697,7 +1697,10 @@ html{scroll-snap-type:y proximity}
 }
 
 .magazine .appreciation{
-  grid-template-columns:repeat(3,minmax(0,1fr));
+  /* Use auto-fit so the grid fills available space with as many columns as will fit.
+     This prevents an empty third column when there are only two articles. */
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:0;
 }
 .magazine .appreciation article{
   min-width:0;
