@@ -7,7 +7,7 @@ import PhotoFullscreen, {
   IconExpand,
   IconRotate,
 } from './PhotoFullscreen'
-import photoCover from '../assets/DSC_7496.jpg'
+import photoCover from '../assets/DSC_7940.jpg'
 import photoStory from '../assets/DSC_7091.jpg'
 import photoFactsMain from '../assets/DSC_7517.jpg'
 import photoThumbOne from '../assets/DSC.jpg'
@@ -16,7 +16,17 @@ import photoThumbThree from '../assets/DSC_7091.jpg'
 import VideoPlayer from './VideoPlayer'
 
 export default function Sections() {
-  const galleryAssets = window.__GALLERY_ASSETS__?.slice(0, 12) || []
+  const galleryAssetsRaw = window.__GALLERY_ASSETS__?.slice(0, 12) || []
+  // Exclude specific photos from the gallery highlights by filename
+  const excludedFilenames = ['DSC.jpg', 'DSC001.jpg']
+  const galleryAssets = galleryAssetsRaw.filter((src) => {
+    try {
+      const fname = String(src).split('/').pop()
+      return !excludedFilenames.includes(fname)
+    } catch {
+      return true
+    }
+  })
   const weddingDate = new Date('2026-04-28T00:00:00')
   const [now, setNow] = useState(() => new Date())
 
