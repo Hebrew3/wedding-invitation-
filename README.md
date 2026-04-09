@@ -29,3 +29,11 @@ If you are developing a production application, we recommend using TypeScript wi
  - A placeholder audio file was added at `public/music.mp3`. Replace with a real audio file.
  - Fonts loaded from Google Fonts (`Libre Baskerville` for headings, `Inter` for UI).
  - Components are in `src/components` and styles in `src/styles/magazine.css`.
+ 
+ ## Video
+
+ The wedding video is available on Google Drive:
+
+ https://drive.google.com/file/d/1f-MXLy5gnTXunU7pKzmJtDG-bIYcHIcq/view?usp=sharing
+
+ You can open that link directly on GitHub or paste it into your browser to view or download the video.

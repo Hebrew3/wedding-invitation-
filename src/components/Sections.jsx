@@ -13,6 +13,7 @@ import photoFactsMain from '../assets/DSC_7517.jpg'
 import photoThumbOne from '../assets/DSC_7456.jpg'
 import photoThumbTwo from '../assets/DSC_7353.jpg'
 import photoThumbThree from '../assets/DSC_7091.jpg'
+import VideoPlayer from './VideoPlayer'
 
 export default function Sections() {
   const galleryAssets = window.__GALLERY_ASSETS__?.slice(0, 12) || []
@@ -599,6 +600,10 @@ export default function Sections() {
 
       <section className="gallery fade-up">
         <h3>Gallery Highlights</h3>
+        {/* Wedding video embedded from Google Drive */}
+        <div className="video-section" style={{ margin: '1.25rem 0' }}>
+          <VideoPlayer fileId="1f-MXLy5gnTXunU7pKzmJtDG-bIYcHIcq" title="Wedding video - Eric & Diane" />
+        </div>
         <div className="photo-grid masonry">
           {galleryAssets.length ? (
             galleryAssets.map((src, i) => (
