@@ -39,8 +39,8 @@ export default function Navbar() {
     function onKey(e) {
       if (e.key === 'Escape') setIsOpen(false)
     }
-    // only lock body scroll on non-mobile so mobile menu can push content
-    if (isOpen && !isMobile) {
+    // lock body scroll while menu is open (we'll show a sidebar on mobile)
+    if (isOpen) {
       document.body.style.overflow = 'hidden'
       window.addEventListener('keydown', onKey)
     } else {
@@ -53,29 +53,10 @@ export default function Navbar() {
   }, [isOpen, isMobile])
 
   useEffect(() => {
-    const sections = links
-      .map((l) => document.getElementById(l.id))
-      .filter(Boolean)
-
-    if (!sections.length) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActive(entry.target.id)
-          }
-        })
-      },
-      {
-        root: null,
-        rootMargin: '-60px 0px -40% 0px',
-        threshold: 0,
-      }
-    )
-
-    sections.forEach((s) => observer.observe(s))
-    return () => observer.disconnect()
+    // Active link is now controlled solely via clicks so it persists until another click.
+    // Previously an IntersectionObserver updated the active item when scrolling —
+    // that behavior was removed to satisfy the "click to persist active" requirement.
+    return undefined
   }, [links])
 
   function handleClick(e, id) {
@@ -91,7 +72,6 @@ export default function Navbar() {
   return (
     <nav className="site-nav" aria-label="Main navigation">
       <div className="site-nav__inner">
-        <div className="site-nav__brand">The Wedding Post</div>
 
         <button
           className={`site-nav__burger ${isOpen ? 'is-open' : ''}`}
@@ -106,22 +86,38 @@ export default function Navbar() {
           </span>
         </button>
 
-        <div className={`site-nav__links ${isOpen ? 'is-open' : ''}`}>
-          {links.map((l) => (
-            <a
-              key={l.id}
-              href={`#${l.id}`}
-              className={`site-nav__link ${active === l.id ? 'active' : ''}`}
-              onClick={(e) => handleClick(e, l.id)}
-            >
-              {l.label}
-            </a>
-          ))}
-        </div>
-        {/* backdrop only on non-mobile where menu overlays content */}
-        {isOpen && !isMobile && (
-          <div className="site-nav__backdrop" onClick={() => setIsOpen(false)} aria-hidden />
+        {/* On mobile, keep links out of the top bar and only render them when the burger menu is open */}
+        {!isMobile ? (
+          <div className={`site-nav__links ${isOpen ? 'is-open' : ''}`}>
+            {links.map((l) => (
+              <a
+                key={l.id}
+                href={`#${l.id}`}
+                className={`site-nav__link ${active === l.id ? 'active' : ''}`}
+                onClick={(e) => handleClick(e, l.id)}
+                aria-current={active === l.id ? 'page' : undefined}
+              >
+                {l.label}
+              </a>
+            ))}
+          </div>
+        ) : (
+          <div className={`site-nav__sidebar ${isOpen ? 'is-open' : ''}`}>
+            {links.map((l) => (
+              <a
+                key={l.id}
+                href={`#${l.id}`}
+                className={`site-nav__link ${active === l.id ? 'active' : ''}`}
+                onClick={(e) => handleClick(e, l.id)}
+                aria-current={active === l.id ? 'page' : undefined}
+              >
+                {l.label}
+              </a>
+            ))}
+          </div>
         )}
+        {/* backdrop when menu overlays content (desktop or mobile sidebar) */}
+        {isOpen && <div className="site-nav__backdrop" onClick={() => setIsOpen(false)} aria-hidden />}
       </div>
     </nav>
   )

@@ -228,33 +228,110 @@ html{scroll-snap-type:y proximity}
 }
 .site-nav{position:sticky;top:12px;z-index:1400}
 .site-nav__inner{display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:1100px;margin:0 auto;padding:12px 16px;background:linear-gradient(180deg,#fff,rgba(255,255,255,0.96));border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
-.site-nav__brand{font-family:'Libre Baskerville',serif;font-size:18px;color:var(--ink)}
-.site-nav__links{display:flex;gap:18px;align-items:center}
-.site-nav__link{color:var(--muted);text-decoration:none;padding:8px 10px;border-radius:6px}
-.site-nav__link.active{background:var(--accent);color:#fff}
+.site-nav__brand{font-family:'Libre Baskerville',serif;font-size:18px;color:var(--ink);order:0;flex:0 0 auto}
+.site-nav__links{display:flex;gap:18px;align-items:center;flex:1;order:1}
+.site-nav__link{color:var(--muted);text-decoration:none;padding:8px 10px;border-radius:6px;background:transparent;transition:background .3s ease,color .3s ease,box-shadow .3s ease,transform .12s ease}
+.site-nav__link.active{background:#a67c52;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,0.12);border-radius:8px}
+/* make links visibly respond to press and keyboard focus */
+.site-nav__link{
+  transition:background .18s ease,color .12s ease,transform .06s ease,box-shadow .12s ease;
+}
+.site-nav__link:active{
+  background:var(--accent);
+  color:#fff;
+  transform:translateY(1px);
+}
+.site-nav__link:focus-visible{
+  outline:none;
+  box-shadow:0 0 0 4px rgba(183,159,122,0.12);
+  border-radius:8px;
+}
 
 /* Burger button (hidden on desktop) */
-.site-nav__burger{display:none;background:transparent;border:0;padding:8px;cursor:pointer}
-.burger-box{display:inline-block;position:relative;width:28px;height:18px}
-.burger-line{position:absolute;left:0;right:0;height:2px;background:#2c2824;border-radius:2px;transition:transform .25s ease,opacity .2s}
-.burger-line:nth-child(1){top:0}
-.burger-line:nth-child(2){top:8px}
-.burger-line:nth-child(3){bottom:0}
+.site-nav__burger{
+  display:none;
+  background:transparent;
+  border:0;
+  padding:6px;
+  cursor:pointer;
+  border-radius:999px;
+  transition:background .18s ease,box-shadow .18s ease,transform .12s ease;
+  -webkit-tap-highlight-color: transparent;
+  /* position burger to the end visually */
+  order: 2;
+  margin-left: auto;
+}
+.site-nav__burger:hover{transform:translateY(-1px)}
+.site-nav__burger:active{transform:translateY(0)}
+.site-nav__burger:focus{outline:none}
+.site-nav__burger:focus-visible{box-shadow:0 0 0 4px rgba(183,159,122,0.12);}
+.site-nav__burger:active{transform:scale(.98)}
+.burger-box{display:inline-block;position:relative;width:34px;height:22px}
+.burger-line{position:absolute;left:4px;right:4px;height:3px;background:#2c2824;border-radius:3px;transition:transform .28s cubic-bezier(.2,.85,.2,1),opacity .18s,background .18s}
+.burger-line:nth-child(1){top:3px;transform-origin:center}
+.burger-line:nth-child(2){top:calc(50% - 1.5px)}
+.burger-line:nth-child(3){bottom:3px;transform-origin:center}
+
+/* open state: transform into X and colorize */
+.site-nav__burger.is-open{background:linear-gradient(180deg,var(--accent),rgba(183,159,122,0.9));box-shadow:0 6px 18px rgba(107,68,35,0.12);}
+.site-nav__burger.is-open .burger-line{background:#fff}
 .site-nav__burger.is-open .burger-line:nth-child(1){transform:translateY(8px) rotate(45deg)}
 .site-nav__burger.is-open .burger-line:nth-child(2){opacity:0}
 .site-nav__burger.is-open .burger-line:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 
+/* subtle hover for accessible contrast on mobile */
+.site-nav__burger:hover .burger-line{background:#231f1d}
+
 /* Mobile: hide links and show burger; when open, show a vertical stacked menu */
 @media (max-width:720px){
-  /* keep navbar visible on mobile by fixing it to the top */
+  /* convert to right-side sliding sidebar on mobile */
   .site-nav{position:fixed;left:0;right:0;top:0;z-index:1600}
-  .site-nav__inner{max-width:100%;margin:0;padding:12px 14px}
+  /* remove the rounded rectangle header look on mobile */
+  .site-nav__inner{max-width:100%;margin:0;padding:10px 12px;background:transparent;border-radius:0;box-shadow:none;border:0}
   .site-nav__links{display:none}
-  .site-nav__burger{display:inline-block}
-  /* mobile menu sits below the fixed nav */
-  .site-nav__links.is-open{display:flex;flex-direction:column;position:absolute;left:12px;right:12px;top:64px;background:#fff;padding:12px;border-radius:10px;box-shadow:0 18px 40px rgba(0,0,0,0.12)}
-  .site-nav__links.is-open .site-nav__link{padding:12px 10px;border-bottom:1px solid var(--rule);color:var(--ink)}
-  .site-nav__links.is-open .site-nav__link:last-child{border-bottom:0}
+  .site-nav__burger{display:inline-block;order:2;margin-left:8px}
+
+  /* sidebar container (hidden by default) */
+  .site-nav__sidebar{
+    position:fixed;
+    top:0;
+    right:-320px; /* hidden off-canvas */
+    width:320px;
+    height:100vh;
+    background:#fff;
+    box-shadow:-20px 0 40px rgba(0,0,0,0.12);
+    padding:20px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    transition:right .32s cubic-bezier(.2,.85,.2,1);
+    z-index:2100;
+  }
+  /* visible when open */
+  .site-nav__sidebar.is-open{right:0}
+
+  .site-nav__sidebar .site-nav__link{display:block;padding:12px 10px;border-bottom:1px solid var(--rule);color:var(--ink);background:transparent;border-radius:8px}
+  .site-nav__sidebar .site-nav__link:last-child{border-bottom:0}
+
+/* Force burger to remain visible on mobile scroll: highest-priority mobile overrides */
+@media (max-width:720px){
+  .site-nav{
+    position:fixed !important;
+    top:8px !important;
+    left:8px !important;
+    right:8px !important;
+    z-index:2200 !important;
+  }
+  .site-nav__inner{padding-top:6px !important;padding-bottom:6px !important}
+  .site-nav__burger{
+    display:inline-block !important;
+    position:relative !important;
+    z-index:2201 !important;
+    margin-left:auto !important;
+  }
+  /* keep links hidden in header unless the burger is open */
+  .site-nav__links:not(.is-open){display:none !important}
+}
 }
 
 /* Give page content space so fixed navbar doesn't cover it on mobile */
@@ -288,6 +365,18 @@ html{scroll-snap-type:y proximity}
   text-transform:uppercase;
   color:var(--muted);
   margin:0;
+}
+/* Final mobile override: ensure the top rounded rectangle is removed on small screens */
+@media (max-width:720px){
+  .site-nav__inner{
+    background:transparent !important;
+    box-shadow:none !important;
+    border-radius:0 !important;
+    border:0 !important;
+    padding:8px 10px !important;
+  }
+  /* if any ancestor re-applies a background, make nav transparent too */
+  .site-nav{background:transparent !important}
 }
 .cover-wedding-date{
   margin:14px 0 0;
