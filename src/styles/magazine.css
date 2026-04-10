@@ -1,11 +1,23 @@
 /* Magazine editorial styles */
 :root{
-  --cream: #f6f1e6;
-  --paper:#fbf8f3;
+  /* Wedding color palette (left-to-right sample swatches) */
+  --sw-1:#F6DC98;
+  --sw-2:#FAE5A5;
+  --sw-3:#FDEEB2;
+  --sw-4:#FFF4C0;
+  --sw-5:#EBE8D4;
+  --sw-6:#CFD0C4;
+  --sw-7:#B3B8B3;
+  --sw-8:#D2E5D1;
+  --sw-9:#ADC8AB;
+  --sw-10:#88AB85;
+
+  --cream: var(--sw-4);
+  --paper: var(--sw-5);
   --ink:#11110f;
   --muted:#6f6b66;
-  --accent:#b79f7a; /* soft brown */
-  --green:#8fa89a;
+  --accent: var(--sw-3); /* warm champagne */
+  --green: var(--sw-9);
   --rule: rgba(17,17,15,0.08);
   /* Long-form reading */
   --font-display:'Libre Baskerville',Georgia,'Times New Roman',serif;
@@ -999,6 +1011,11 @@ html{scroll-snap-type:y proximity}
   word-break:break-word;
 }
 
+/* Featured section title (matches invite-band style but smaller) */
+
+/* center the featured block contents (title + video) */
+.video-feature{ text-align:center }
+
 /* Event location cards under the invite band */
 .event-locations{
   display:flex;
@@ -1032,6 +1049,117 @@ html{scroll-snap-type:y proximity}
 
 @media(max-width:820px){
   .event-locations{flex-direction:column}
+}
+
+/* Cover details and timeline styling improvements */
+.cover-details-block{
+  border-radius:8px;
+  border:1px solid rgba(183,159,122,0.12);
+  background:linear-gradient(180deg,#fff,#fbf8f3);
+  box-shadow:0 8px 20px rgba(17,17,15,0.04);
+  padding:18px 20px;
+  margin-top:12px;
+}
+.cover-details-block .details-title{font-family:var(--font-display);font-size:20px;margin-bottom:6px}
+
+.timeline-card.details-box{
+  border-radius:8px;
+  border:1px solid rgba(183,159,122,0.08);
+  background:linear-gradient(180deg,#fff,#fbfbf8);
+  box-shadow:0 6px 18px rgba(17,17,15,0.03);
+  padding:14px 18px;
+}
+.timeline-card .sidebar-timeline-list{margin:0;padding:0}
+.timeline-card .sidebar-timeline-list li{margin:8px 0;color:var(--text-ink);font-size:15px}
+.timeline-card .sidebar-timeline-list strong{color:var(--ink);font-weight:700}
+
+.location-card{align-items:center}
+.location-card .location-title{font-size:16px}
+.location-card .location-link{font-size:14px}
+
+/* Vertical timeline: central line with alternating left/right cards */
+.timeline-diagram{
+  position:relative;
+  display:block;
+  padding:28px 12px;
+  width:100%;
+  max-width:900px;
+  margin:0 auto;
+}
+
+/* central line */
+.timeline-diagram::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:12px;
+  bottom:12px;
+  width:2px;
+  background:var(--rule);
+  transform:translateX(-50%);
+}
+
+.timeline-item{
+  position:relative;
+  width:100%;
+  display:flex;
+  margin:18px 0;
+}
+
+.timeline-item--left{justify-content:flex-end;padding-right:52px}
+.timeline-item--right{justify-content:flex-start;padding-left:52px}
+
+.bubble{
+  border-radius:10px;
+  border:2px solid currentColor;
+  padding:12px 16px;
+  background:transparent;
+  color:var(--ink);
+  min-width:220px;
+  max-width:44%;
+  text-align:center;
+}
+.bubble .time{font-weight:700;color:var(--ink);font-size:15px;margin-bottom:6px}
+.bubble .desc{font-size:14px;color:var(--muted)}
+
+/* use the existing color classes but keep them as outline colors (they define currentColor) */
+.color-1{color:#f4b942}
+.color-2{color:#9fe0b6}
+.color-3{color:#9b9b9b}
+.color-4{color:#f6d24a}
+
+/* connector node at center line */
+.timeline-item .node{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:18px;height:18px;border-radius:999px;border:3px solid currentColor;background:#fff;box-sizing:content-box;z-index:3;
+}
+
+/* ensure node border color follows the bubble's color (bubble is the colored element) */
+.bubble.color-1 + .node{border-color:#f4b942}
+.bubble.color-2 + .node{border-color:#9fe0b6}
+.bubble.color-3 + .node{border-color:#9b9b9b}
+.bubble.color-4 + .node{border-color:#f6d24a}
+
+/* small pointer from bubble to central line */
+.timeline-item--left .bubble{clip-path:polygon(0 0,100% 0,100% 100%, 8% 100%, 0 86%)}
+.timeline-item--right .bubble{clip-path:polygon(0 0,100% 0,100% 86%, 92% 100%, 0 100%)}
+
+@media(max-width:820px){
+  .bubble{max-width:60%}
+}
+@media(max-width:640px){
+  /* Move central line to the left gutter and stack full-width cards */
+  .timeline-diagram::before{left:36px;transform:none}
+  .timeline-item{margin:18px 0;padding-left:12px}
+  .timeline-item--left,.timeline-item--right{justify-content:flex-start;padding:0}
+  /* full-width bubbles with left-aligned text for mobile clarity */
+  .bubble{max-width:calc(100% - 84px);width:auto;text-align:left;padding:14px;margin-left:48px}
+  .timeline-item .node{left:36px}
+  /* remove decorative clip paths on mobile to avoid rendering artifacts */
+  .timeline-item--left .bubble,.timeline-item--right .bubble{clip-path:none}
 }
 
 /* Party spread (names) under the cover photo */
@@ -1952,6 +2080,109 @@ html{scroll-snap-type:y proximity}
   padding:18px 6px 6px 6px;
   border-top:1px dotted var(--rule);
 }
+
+/* ---- Wedding Party: newspaper / editorial layout (column flow) ---- */
+.wedding-party{
+  position:relative;
+  margin:18px 0;
+}
+
+.wedding-party .party-title{
+  margin:0 auto 14px auto;
+  max-width:900px;
+  text-align:center;
+  font-family:var(--font-display);
+  font-variant:small-caps;
+  letter-spacing:0.12em;
+  background:transparent;
+  padding:6px 10px;
+  color:var(--ink);
+}
+
+.wedding-party .party-block{
+  position:relative;
+  /* Newspaper-style columns: content flows top-to-bottom across columns */
+  column-count:3;
+  column-gap:26px;
+  background:linear-gradient(180deg,var(--paper),#fff);
+  border:1px solid rgba(17,17,15,0.06);
+  padding:16px 18px;
+  border-radius:6px;
+  box-shadow:0 6px 18px rgba(17,17,15,0.035);
+  max-width:980px;
+  margin:0 auto 8px;
+  z-index:2;
+  column-rule:1px solid rgba(17,17,15,0.04); /* thin divider between columns */
+}
+
+.wedding-party .party-group{
+  text-align:left; /* newspaper style prefers left-aligned blocks */
+  display:inline-block; /* allow column flow */
+  width:100%;
+  padding:4px 6px 8px 6px; /* tighter vertical padding */
+  margin:0 0 6px 0;
+  break-inside:avoid; /* keep groups intact inside columns */
+  -webkit-column-break-inside:avoid;
+  border-bottom:1px solid rgba(17,17,15,0.04);
+}
+.wedding-party .party-group:last-child{border-bottom:none}
+
+.wedding-party .party-group h4,
+.wedding-party .party-group h3,
+.wedding-party .party-group h2{
+  margin:0 0 6px 0;
+  font-family:var(--font-display);
+  font-size:12px; /* slightly smaller */
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+
+.wedding-party .role-name{
+  font-family:'Libre Baskerville',serif;
+  font-size:13px; /* compacted */
+  color:var(--text-ink);
+  margin:0 0 4px 0;
+}
+
+.wedding-party .sponsor-list{list-style:none;padding:0;margin:4px 0 0 0;column-count:2;column-gap:12px}
+.wedding-party .sponsor-list li{margin:2px 0;font-family:'Libre Baskerville',serif;font-size:13px;color:var(--text-ink)}
+
+.wedding-party .paired{margin:0 0 8px 0}
+
+.wedding-party .entourage-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px 12px;
+}
+.wedding-party .entourage-item h3{font-size:12px;margin:0 0 6px 0}
+
+/* ceremonial block spans full width and avoids column breaks */
+.wedding-party .party-ceremonial{display:block;width:100%;break-inside:avoid;margin-top:6px;padding-top:6px;border-top:1px solid rgba(17,17,15,0.04)}
+.wedding-party .party-ceremonial h2{font-size:14px;margin-bottom:6px}
+
+/* Ceremonial grid: horizontal flex inside the ceremonial block */
+.wedding-party .ceremonial-grid{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+}
+.wedding-party .ceremonial-grid > div{flex:1 1 0;min-width:0}
+
+@media (max-width:980px){
+  .wedding-party .party-block{column-count:2;column-gap:20px;padding:14px}
+  .wedding-party .party-group{padding:4px 6px}
+}
+
+@media (max-width:640px){
+  .wedding-party .party-block{column-count:1;padding:12px;column-rule:none}
+  .wedding-party .party-block::before,.wedding-party .party-block::after{display:none}
+  .wedding-party .party-group{text-align:center;border-bottom:1px solid rgba(17,17,15,0.04)}
+  .wedding-party .entourage-grid{grid-template-columns:1fr}
+  .wedding-party .sponsor-list{column-count:1}
+  .wedding-party .ceremonial-grid{flex-direction:column;gap:6px}
+}
+
 .details-box{background:linear-gradient(#fff,#fbfbfb);border:1px solid var(--rule);padding:14px;margin-bottom:12px}
 .details-box .details-title{
   font-family:'Libre Baskerville',serif;

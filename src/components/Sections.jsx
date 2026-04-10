@@ -10,8 +10,11 @@ import photoCover from '../assets/DSC_7940.jpg'
 import photoStory from '../assets/DSC_7091.jpg'
 import photoFactsMain from '../assets/DSC_7517.jpg'
 import photoThumbOne from '../assets/DSC.jpg'
-import photoThumbTwo from '../assets/DSC001.jpg'
-import photoThumbThree from '../assets/DSC_7091.jpg'
+import photoThumbTwo from '../assets/DSC_7091.jpg'
+import photoThumbThree from '../assets/DSC001.jpg'
+import photoAltOne from '../assets/DSC_7353.jpg'
+import photoAltTwo from '../assets/DSC_7365.jpg'
+import photoMilestone from '../assets/DSC_7675.jpg'
 import VideoPlayer from './VideoPlayer'
 
 export default function Sections() {
@@ -210,56 +213,7 @@ export default function Sections() {
 
         <div className="cover-grid">
           <aside className="party-card program-sidebar">
-            <div className="details-box">
-              <div className="details-title">The Wedding Details</div>
-              <div className="details-date"><strong>04.28.2026</strong><br/><span className="muted">Tuesday | Calatagan</span></div>
-
-              <div className="venue venue-top-space">
-                <div className="venue-icon">⛪</div>
-                <div className="venue-text"><strong>Wedding Ceremony:</strong><br />Sto. Domingo de Silos Parish Church<br />Brgy. 2, Calatagan, Batangas</div>
-              </div>
-
-              <div className="venue venue-gap-sm">
-                <div className="venue-icon">🏠</div>
-                <div className="venue-text"><strong>Wedding Reception:</strong><br />Maullon Residence<br />Luya, Calatagan, Batangas</div>
-              </div>
-            </div>
-            <div className="party-title">THE WEDDING PARTY</div>
-            <div className="party-list">
-              <div className="role">
-                <div className="role-label">PARENTS OF THE BRIDE</div>
-                <div className="role-name">Mr. Danilo &amp; Mrs. Maria Maullon</div>
-              </div>
-
-              <div className="role">
-                <div className="role-label">PARENTS OF THE GROOM</div>
-                <div className="role-name">Mr. Felix &amp; Mrs. Victoria Ungos</div>
-              </div>
-
-              <div className="role">
-                <div className="role-label">MAID OF HONOR</div>
-                <div className="role-name">Dawn Kathlyn D. Maullon</div>
-              </div>
-
-              <div className="role">
-                <div className="role-label">BEST MAN</div>
-                <div className="role-name">Jomari E. Ungos</div>
-              </div>
-
-              <div className="role sponsors">
-                <div className="role-label">PRINCIPAL SPONSORS</div>
-                <ul className="sponsor-list">
-                  <li>Ms. Mary Jane L. Digno</li>
-                  <li>Mr. Greg &amp; Mrs. Ellen De Roxas</li>
-                  <li>Mr. Rolando &amp; Mrs. Marilyn Macalindong</li>
-                  <li>Mr. Romano &amp; Mrs. Arlene Gomez</li>
-                  <li>Mr. Christopher &amp; Mrs. Peñafrancia Tegio</li>
-                  <li>Mr. Efren &amp; Mrs. Marissa Bautista</li>
-                  <li>Mr. Silverio &amp; Mrs. Aileen Venzon</li>
-                  <li>Mr. Danielle Monro &amp; Ms. Rosalia D. Eleponga</li>
-                </ul>
-              </div>
-            </div>
+            {/* Left column: kept details box only; wedding party moved to its own section below */}
           </aside>
 
           <div className="cover-photo">
@@ -270,68 +224,140 @@ export default function Sections() {
             </div>
 
             {/* Party names spread under the cover photo (aligned to the image column) */}
-            <div className="party-spread">
-              <div className="party-col left">
-                <h4>TO LIGHT OUR PATH</h4>
-                <p className="name">Babelyn C. Catalan</p>
-                <p className="name highlight">Michellen M. Dayrit</p>
 
-                <h4>TO CLOTHE AS ONE</h4>
-                <p className="name">Maria Ella D. Noche</p>
-                <p className="name">Diana Jane E. Ungos</p>
 
-                <h4>TO BIND US TOGETHER</h4>
-                <p className="name">Austrel D. Balbanida</p>
-                <p className="name">Tisha Nicole S. Mallari</p>
+          {/* Reorganized Wedding Party section placed after the cover image */}
+          <section className="wedding-party" aria-labelledby="wedding-party-title">
+            <h3 id="wedding-party-title" className="party-title">THE WEDDING PARTY</h3>
 
-                <h4>BRIDE'S MAID</h4>
-                <p className="name">Elleah Kate D. Tegio</p>
-
-                <h4>BIBLE BEARER</h4>
-                <p className="name">Kian Pulot</p>
+            <div className="party-block">
+              <div className="party-group">
+                <h4>PARENTS OF THE BRIDE</h4>
+                <p className="role-name">Mr. Danilo &amp; Mrs. Maria Maullon</p>
               </div>
 
-              <div className="party-col center">
-                <h4>LITTLE GENTS</h4>
-                <p className="name">Harrie D. Cruzado</p>
-                <p className="name">Emerson D. Venzon</p>
-                <p className="name">Jan Amenadiel C. Macalalald</p>
-                <p className="name">Liam M. Legaspi</p>
-                <p className="name">Austin Tyrone Delos Santos</p>
-
-                <h4>GROOM'S MAN</h4>
-                <p className="name">Rhenier A. De Jesus</p>
-
-                <h4>RING BEARER</h4>
-                <p className="name">Kyden Yuan Venzon</p>
-
-                <h4>COIN BEARER</h4>
-                <p className="name">Marcus Ethan C. Reyes</p>
+              <div className="party-group">
+                <h4>PARENTS OF THE GROOM</h4>
+                <p className="role-name">Mr. Felix &amp; Mrs. Victoria Ungos</p>
               </div>
 
-              <div className="party-col right">
-                <h4>FLOWER GIRLS</h4>
-                <p className="name">Hermione Geanna D. Daluz</p>
-                <p className="name">Daphny S. Morillo</p>
-                <p className="name">Jennel Zyreen U. Cruzado</p>
-                <p className="name">Hannah Faith D. Cleofe</p>
-
-                <h4>PETAL PRINCESSES</h4>
-                <p className="name">Deen N. Sobrado</p>
-                <p className="name">Zia Emily Venzon</p>
+              <div className="party-group">
+                <h4>MAID OF HONOR</h4>
+                <p className="role-name">Dawn Kathlyn D. Maullon</p>
               </div>
-            </div>
+
+              <div className="party-group">
+                <h4>BEST MAN</h4>
+                <p className="role-name">Jomari E. Ungos</p>
+              </div>
+
+              <div className="party-group">
+                <h4>PRINCIPAL SPONSORS</h4>
+                <ul className="sponsor-list" style={{listStyle: 'none', paddingLeft: 0, marginTop: '8px'}}>
+                  <li>Ms. Mary Jane L. Digno</li>
+                  <li>Mr. Greg &amp; Mrs. Ellen De Roxas</li>
+                  <li>Mr. Rolando &amp; Mrs. Marilyn Macalindong</li>
+                  <li>Mr. Romano &amp; Mrs. Arlene Gomez</li>
+                  <li>Mr. Christopher &amp; Mrs. Peñafrancia Tegio</li>
+                  <li>Mr. Efren &amp; Mrs. Marissa Bautista</li>
+                  <li>Mr. Silverio &amp; Mrs. Aileen Venzon</li>
+                  <li>Mr. Danielle Monro &amp; Ms. Rosalia D. Eleponga</li>
+                </ul>
+              </div>
+
+              <div className="party-group party-ceremonial">
+                <h2>CEREMONIAL ROLES</h2>
+                <div className="ceremonial-grid">
+                  <div>
+                    <h3>TO LIGHT OUR PATH</h3>
+                    <p className="paired">Babelyn C. Catalan &amp; Harrie D. Cruzado</p>
+                  </div>
+
+                  <div>
+                    <h3>TO CLOTHE AS ONE</h3>
+                    <p className="paired">Maria Ella D. Noche &amp; John Michael B. Digno</p>
+                    <p className="paired">Diana Jane E. Ungos &amp; Xander James U. Cruzado</p>
+                  </div>
+
+                  <div>
+                    <h3>TO BIND US TOGETHER</h3>
+                    <p className="paired">Austrel D. Balbanida &amp; Ken Wilton S. Venzon</p>
+                    <p className="paired">Tisha Nicole S. Mallari &amp; Greco M. Umali</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="party-group">
+                <div className="entourage-grid">
+                  <div className="entourage-item">
+                    <h3>BRIDE'S MAID</h3>
+                    <p className="role-name">Elleah Kate D. Tegio</p>
+                  </div>
+                  <div className="entourage-item">
+                    <h3>GROOM'S MAN</h3>
+                    <p className="role-name">Rhenier A. De Jesus</p>
+                  </div>
+                  <div className="entourage-item">
+                    <h3>BIBLE BEARER</h3>
+                    <p className="role-name">Kian Pulot</p>
+                  </div>
+                  <div className="entourage-item">
+                    <h3>RING BEARER</h3>
+                    <p className="role-name">Kyden Yuan Venzon</p>
+                  </div>
+                  <div className="entourage-item">
+                    <h3>COIN BEARER</h3>
+                    <p className="role-name">Marcus Ethan C. Reyes</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="party-group party-kids">
+                <h2>KIDS</h2>
+                <div className="entourage-grid">
+                  <div className="entourage-item">
+                    <h3>LITTLE GENTS</h3>
+                    <p className="role-name">Jan Amenadiel C. Macalalald</p>
+                    <p className="role-name">Liam  M. Legaspi</p>
+                    <p className="role-name">Austin Tyrone Delos Santos </p>
+                  </div>
+                  <div className="entourage-item">
+                    <h3>FLOWER GIRLS</h3>
+                    <p className="role-name">Hermione Geanna D. Daluz</p>
+                    <p className="role-name">Daphny S. Morillo</p>
+                    <p className="role-name">Jennel Zyreen U. Cruzado</p>
+                    <p className="role-name">Hannah Faith D. Cleofe</p>
+                  </div>
+                  <div className="entourage-item">
+                    <h3>PETAL PRINCESSES</h3>
+                    <p className="role-name">Deen N. Sobrado</p>
+                    <p className="role-name">Zia Emily Venzon</p>
+                  </div>
+                </div>
+              </div>
+        </div>
+          </section>
           </div>
         </div>
 
         <div className="invite-band">You are invited !</div>
+
+        <div className="cover-details-block" style={{margin: '1.25rem 0', padding: '1rem 1.25rem', border: '1px solid #e7dfd0', borderRadius: '4px', background: '#fff'}}>
+          <div style={{maxWidth: 980, margin: '0 auto'}}>
+            <div className="details-title" style={{textAlign: 'center', fontSize: '1.5rem', paddingBottom: '0.25rem'}}>The Wedding Details</div>
+            <div style={{textAlign: 'center', marginBottom: '0.75rem'}}>
+              <div style={{fontSize: '1.15rem'}}><strong>04.28.2026</strong></div>
+              <div className="muted">Tuesday | Calatagan</div>
+            </div>
+          </div>
+        </div>
 
         {/* Event location quick links */}
         <div className="event-locations">
           <div className="location-card">
             <div className="location-icon">⛪</div>
             <div>
-              <div className="location-title">Ceremony</div>
+              <div className="location-title">Wedding Ceremony</div>
               <a className="location-link" href="https://www.google.com/maps/search/Sto.+Domingo+de+Silos+Parish+Church+Calatagan" target="_blank" rel="noopener noreferrer">Sto. Domingo de Silos Parish Church, Brgy. 2, Calatagan, Batangas</a>
             </div>
           </div>
@@ -339,11 +365,53 @@ export default function Sections() {
           <div className="location-card">
             <div className="location-icon">🏠</div>
             <div>
-              <div className="location-title">Reception</div>
+              <div className="location-title">Wedding Reception</div>
               <a className="location-link" href="https://www.google.com/maps/search/Maullon+Residence+Luya+Calatagan" target="_blank" rel="noopener noreferrer">Maullon Residence, Luya, Calatagan, Batangas</a>
             </div>
           </div>
         </div>
+
+        <div className="cover-details-block" style={{margin: '1.25rem 0', padding: '1rem 1.25rem', border: '1px solid #e7dfd0', borderRadius: '4px', background: '#fff'}}>
+          <div style={{maxWidth: 980, margin: '0 auto'}}>
+            <div className="details-title" style={{textAlign: 'center', fontSize: '1.5rem', paddingBottom: '0.25rem'}}>The Wedding Timeline</div>
+            <div style={{textAlign: 'center', marginBottom: '0.75rem'}}>
+              <div className="timeline-diagram">
+                <div className="timeline-item timeline-item--left">
+                  <div className="bubble color-1">
+                    <div className="time">8:30 AM</div>
+                    <div className="desc">Entourage line up at the church</div>
+                  </div>
+                  <div className="node" aria-hidden="true"></div>
+                </div>
+
+                <div className="timeline-item timeline-item--right">
+                  <div className="bubble color-2">
+                    <div className="time">9:00 AM</div>
+                    <div className="desc">Wedding Ceremony</div>
+                  </div>
+                  <div className="node" aria-hidden="true"></div>
+                </div>
+
+                <div className="timeline-item timeline-item--left">
+                  <div className="bubble color-3">
+                    <div className="time">10:00 AM</div>
+                    <div className="desc">Church Photo Session / Post Nuptial</div>
+                  </div>
+                  <div className="node" aria-hidden="true"></div>
+                </div>
+
+                <div className="timeline-item timeline-item--right">
+                  <div className="bubble color-4">
+                    <div className="time">11:00 AM</div>
+                    <div className="desc">Reception's Activities</div>
+                  </div>
+                  <div className="node" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </section>
       </div>
       </section>
@@ -352,26 +420,19 @@ export default function Sections() {
       <div className="story-page__content">
       <section className="details fade-up">
         <aside className="sidebar">
-          <h3>The Wedding Details</h3>
-          <p className="muted"><strong>04.28.2026</strong><br />Tuesday | Calatagan</p>
-          <p className="sidebar-block"><strong>Wedding Ceremony:</strong><br />Sto. Domingo de Silos Parish Church<br />Brgy. 2, Calatagan, Batangas</p>
-          <p className="sidebar-block sidebar-block-tight"><strong>Wedding Reception:</strong><br />Maullon Residence<br />Luya, Calatagan, Batangas</p>
-
-          <h3 className="sidebar-section-title">The Wedding Timeline</h3>
-          <ul className="sidebar-timeline-list">
-            <li><strong>8:30 AM</strong> — Entourage line up at the church</li>
-            <li><strong>9:00 AM</strong> — Wedding Ceremony</li>
-            <li><strong>10:00 AM</strong> — Church Photo Session / Post Nuptial</li>
-            <li><strong>11:00 AM</strong> — Reception's Activities</li>
-          </ul>
 
           <h3 className="sidebar-section-title sidebar-section-title-sm">Wedding Color Palette</h3>
           <div className="swatches swatches-tight">
-            <div style={{ background: '#f6f1e6' }}></div>
-            <div style={{ background: '#fff' }}></div>
-            <div style={{ background: '#b9a07b' }}></div>
-            <div style={{ background: '#d9caa9' }}></div>
-            <div style={{ background: '#8fa89a' }}></div>
+            <div style={{ background: 'var(--sw-1)' }}></div>
+            <div style={{ background: 'var(--sw-2)' }}></div>
+            <div style={{ background: 'var(--sw-3)' }}></div>
+            <div style={{ background: 'var(--sw-4)' }}></div>
+            <div style={{ background: 'var(--sw-5)' }}></div>
+            <div style={{ background: 'var(--sw-6)' }}></div>
+            <div style={{ background: 'var(--sw-7)' }}></div>
+            <div style={{ background: 'var(--sw-8)' }}></div>
+            <div style={{ background: 'var(--sw-9)' }}></div>
+            <div style={{ background: 'var(--sw-10)' }}></div>
           </div>
         </aside>
 
@@ -387,7 +448,6 @@ export default function Sections() {
               aria-label="View program photo full screen"
             >
               <IconExpand className="photo-expand-btn__icon" />
-              <span className="photo-expand-btn__text">Full screen</span>
             </button>
           </div>
 
@@ -415,7 +475,6 @@ export default function Sections() {
                   aria-label="View portrait full screen"
                 >
                   <IconExpand className="photo-expand-btn__icon" />
-                  <span className="photo-expand-btn__text">Full screen</span>
                 </button>
               </div>
 
@@ -433,10 +492,10 @@ export default function Sections() {
                   <button
                     type="button"
                     className="thumb-expand"
-                    onClick={() => openFullscreen(photoThumbOne, 'Couple moment one')}
+                    onClick={() => openFullscreen(photoAltOne, 'Couple moment one')}
                     aria-label="View couple moment one full screen"
                   >
-                    <img src={photoThumbOne} alt="" />
+                    <img src={photoAltOne} alt="" />
                   </button>
                   <button
                     type="button"
@@ -446,13 +505,14 @@ export default function Sections() {
                   >
                     <img src={photoThumbTwo} alt="" />
                   </button>
+                  
                   <button
                     type="button"
                     className="thumb-expand"
-                    onClick={() => openFullscreen(photoThumbThree, 'Couple moment three')}
+                    onClick={() => openFullscreen(photoAltTwo, 'Couple moment three')}
                     aria-label="View couple moment three full screen"
                   >
-                    <img src={photoThumbThree} alt="" />
+                    <img src={photoAltTwo} alt="" />
                   </button>
                 </div>
               </div>
@@ -492,15 +552,14 @@ export default function Sections() {
           </ul>
         </div>
         <div className="milestones-right photo-expandable">
-          <img src={photoThumbThree} alt="Couple by the windmill" />
+          <img src={photoMilestone} alt="Couple by the windmill" />
           <button
             type="button"
             className="photo-expand-btn"
-            onClick={() => openFullscreen(photoThumbThree, 'Couple by the windmill')}
+            onClick={() => openFullscreen(photoMilestone, 'Couple by the windmill')}
             aria-label="View photo full screen"
           >
             <IconExpand className="photo-expand-btn__icon" />
-            <span className="photo-expand-btn__text">Full screen</span>
           </button>
         </div>
       </section>
@@ -534,7 +593,6 @@ export default function Sections() {
             aria-label="View photo full screen"
           >
             <IconExpand className="photo-expand-btn__icon" />
-            <span className="photo-expand-btn__text">Full screen</span>
           </button>
         </div>
       </section>
@@ -561,10 +619,10 @@ export default function Sections() {
           <button
             type="button"
             className="family-photo-tile"
-            onClick={() => openFullscreen(photoThumbTwo, 'Family gathering two')}
+            onClick={() => openFullscreen(photoThumbThree, 'Family gathering two')}
             aria-label="View family photo two full screen"
           >
-            <img src={photoThumbTwo} alt="" />
+            <img src={photoThumbThree} alt="" />
             <span className="family-photo-tile__shine" aria-hidden />
             <span className="family-photo-tile__hint">
               <IconExpand className="family-photo-tile__hint-icon" />
@@ -588,11 +646,14 @@ export default function Sections() {
       </section>
 
   <section id="gallery" className="gallery fade-up">
-        <h3>Gallery Highlights</h3>
-        {/* Wedding video embedded from Google Drive */}
-        <div className="video-section" style={{ margin: '1.25rem 0' }}>
-          <VideoPlayer fileId="1f-MXLy5gnTXunU7pKzmJtDG-bIYcHIcq" title="Wedding video - Eric & Diane" />
+        {/* Featured video - placed before gallery highlights */}
+        <div className="video-feature">
+          <div className="invite-band">Eric &amp; Diane — Engagement Session</div>
+          <div className="video-section" style={{ margin: '1.25rem 0' }}>
+            <VideoPlayer fileId="1f-MXLy5gnTXunU7pKzmJtDG-bIYcHIcq" title="Prenup Video" />
+          </div>
         </div>
+        <h3>Gallery Highlights</h3>
         <div className="photo-grid masonry">
           {galleryAssets.length ? (
             galleryAssets.map((src, i) => (
