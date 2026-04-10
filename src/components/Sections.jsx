@@ -6,6 +6,13 @@ import PhotoFullscreen, {
   IconClose,
   IconExpand,
 } from './PhotoFullscreen'
+import {
+  IconEnvelope,
+  IconCoffee,
+  IconRing,
+  IconParty,
+  IconHeart,
+} from './Icons'
 import photoCover from '../assets/DSC_7940.jpg'
 import photoStory from '../assets/DSC_7091.jpg'
 import photoFactsMain from '../assets/DSC_7517.jpg'
@@ -104,12 +111,23 @@ export default function Sections() {
       )
     )
     if (!imgs.length) return
+
+    // build a deterministic index map for stagger delays based on document order
+    const galleryItems = Array.from(document.querySelectorAll('.photo-grid .gallery-item'))
+    const itemIndex = new Map(galleryItems.map((el, idx) => [el, idx]))
+
     const obs = new IntersectionObserver((entries, observer) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return
         const img = entry.target
+        const item = img.closest('.gallery-item')
+        const idx = itemIndex.get(item) ?? 0
+        // set a CSS variable stagger on the item so CSS can apply delays
+        if (item) item.style.setProperty('--stagger', `${idx * 80}ms`)
         img.src = img.dataset.src
         img.removeAttribute('data-src')
+        // mark loaded so CSS can transition from initial state
+        img.addEventListener('load', () => item && item.classList.add('loaded'), { once: true })
         observer.unobserve(img)
       })
     }, { rootMargin: '200px' })
@@ -355,7 +373,11 @@ export default function Sections() {
         {/* Event location quick links */}
         <div className="event-locations">
           <div className="location-card">
-            <div className="location-icon">⛪</div>
+            <div className="location-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path d="M12 3l9 7v11a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10l9-7z" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
             <div>
               <div className="location-title">Wedding Ceremony</div>
               <a className="location-link" href="https://www.google.com/maps/search/Sto.+Domingo+de+Silos+Parish+Church+Calatagan" target="_blank" rel="noopener noreferrer">Sto. Domingo de Silos Parish Church, Brgy. 2, Calatagan, Batangas</a>
@@ -363,7 +385,11 @@ export default function Sections() {
           </div>
 
           <div className="location-card">
-            <div className="location-icon">🏠</div>
+            <div className="location-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path d="M3 11.5L12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-8.5z" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
             <div>
               <div className="location-title">Wedding Reception</div>
               <a className="location-link" href="https://www.google.com/maps/search/Maullon+Residence+Luya+Calatagan" target="_blank" rel="noopener noreferrer">Maullon Residence, Luya, Calatagan, Batangas</a>
@@ -530,23 +556,23 @@ export default function Sections() {
           <h3>Long Story Short</h3>
           <ul className="milestone-list">
             <li>
-              <span className="milestone-icon">💌</span>
+              <span className="milestone-icon"><IconEnvelope /></span>
               <div><strong>First Hello</strong><p>"Hello Ma'am" - April 18, 2022</p></div>
             </li>
             <li>
-              <span className="milestone-icon">☕</span>
+              <span className="milestone-icon"><IconCoffee /></span>
               <div><strong>First Date</strong><p>May 08, 2022</p></div>
             </li>
             <li>
-              <span className="milestone-icon">💍</span>
+              <span className="milestone-icon"><IconRing /></span>
               <div><strong>Yes As A Couple</strong><p>May 28, 2022</p></div>
             </li>
             <li>
-              <span className="milestone-icon">🎉</span>
+              <span className="milestone-icon"><IconParty /></span>
               <div><strong>Pamamanhikan/Bulungan</strong><p>January 08, 2026</p></div>
             </li>
             <li>
-              <span className="milestone-icon">🤍</span>
+              <span className="milestone-icon"><IconHeart /></span>
               <div><strong>Tying The Knot</strong><p>April 28, 2026</p></div>
             </li>
           </ul>
@@ -653,7 +679,7 @@ export default function Sections() {
             <VideoPlayer fileId="1f-MXLy5gnTXunU7pKzmJtDG-bIYcHIcq" title="Prenup Video" />
           </div>
         </div>
-        <h3>Gallery Highlights</h3>
+        <h3>Gallery</h3>
         <div className="photo-grid masonry">
           {galleryAssets.length ? (
             galleryAssets.map((src, i) => (

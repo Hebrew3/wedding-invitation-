@@ -1,22 +1,25 @@
 /* Magazine editorial styles */
 :root{
   /* Wedding color palette (left-to-right sample swatches) */
-  --sw-1:#F6DC98;
-  --sw-2:#FAE5A5;
-  --sw-3:#FDEEB2;
-  --sw-4:#FFF4C0;
-  --sw-5:#EBE8D4;
-  --sw-6:#CFD0C4;
-  --sw-7:#B3B8B3;
-  --sw-8:#D2E5D1;
-  --sw-9:#ADC8AB;
-  --sw-10:#88AB85;
+  /* Rust-brown themed swatches (left-to-right)
+    sw-1: light cream, sw-2: pale sand, sw-3: warm rust, sw-4: deep rust, sw-5: muted tan
+    sw-6..sw-10: supporting neutrals/greens if needed */
+  --sw-1:#F9EECF; /* pale cream */
+  --sw-2:#F6E7B8; /* soft butter */
+  --sw-3:#F2DC78; /* warm yellow */
+  --sw-4:#F6C89A; /* peachy apricot */
+  --sw-5:#E7E3D9; /* warm neutral */
+  --sw-6:#CFCFC6; /* soft stone */
+  --sw-7:#BFD7C3; /* muted sage */
+  --sw-8:#D9EAD9; /* pale mint */
+  --sw-9:#BFE0B9; /* soft green */
+  --sw-10:#86B285; /* deeper sage */
 
-  --cream: var(--sw-4);
+  --cream: var(--sw-1);
   --paper: var(--sw-5);
   --ink:#11110f;
   --muted:#6f6b66;
-  --accent: var(--sw-3); /* warm champagne */
+  --accent: var(--sw-4); /* deep rust/brown accent */
   --green: var(--sw-9);
   --rule: rgba(17,17,15,0.08);
   /* Long-form reading */
@@ -94,6 +97,21 @@ html{scroll-snap-type:y proximity}
     radial-gradient(ellipse 80% 50% at 50% 100%, rgba(183,159,122,0.08), transparent 60%),
     linear-gradient(165deg,#fffef9 0%,var(--paper) 45%,#fff 100%);
 }
+.closed-invitation.preopen .letter-envelope__fold--left{transform-origin:right center;transform:translateX(-6px) rotateY(-110deg);transition:transform .85s cubic-bezier(.2,.9,.2,1)}
+.closed-invitation.preopen .letter-envelope__fold--right{transform-origin:left center;transform:translateX(6px) rotateY(110deg);transition:transform .85s cubic-bezier(.2,.9,.2,1)}
+.closed-invitation.preopen .letter-envelope__flap{transform:translateY(-72px) rotateX(30deg);transition:transform .65s cubic-bezier(.2,.9,.2,1) .12s}
+.closed-invitation.preopen .letter-envelope__paper{filter:drop-shadow(0 30px 40px rgba(17,17,15,0.12));transition:filter .6s ease}
+.letter-envelope{position:relative;margin-top:36px;margin-bottom:12px}
+.letter-envelope__paper{width:140px;height:110px;background:#fff;border-radius:6px;margin:0 auto;box-shadow:0 10px 30px rgba(17,17,15,0.06);position:relative}
+.letter-envelope__fold{position:absolute;top:0;width:70px;height:110px;background:linear-gradient(180deg,rgba(250,246,244,0.95),rgba(245,240,236,0.95));border-radius:6px}
+.letter-envelope__fold--left{left:0;transform-origin:left center}
+.letter-envelope__fold--right{right:0;transform-origin:right center}
+.letter-envelope__flap{position:absolute;left:50%;top:-36px;transform:translateX(-50%);width:220px;height:80px;background:linear-gradient(180deg,rgba(245,235,241,0.95),rgba(250,240,245,0.9));border-radius:6px}
+.letter-envelope__seal{position:absolute;left:50%;top:36px;transform:translateX(-50%);width:64px;height:64px;border-radius:50%;background:linear-gradient(180deg,#eaa6b9,#c86c86);box-shadow:0 12px 28px rgba(200,80,120,0.18);border:6px solid rgba(255,255,255,0.4);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.letter-envelope__seal-core{color:#fff;font-weight:700;text-transform:uppercase}
+.letter-envelope__seal.is-animating,.letter-envelope__seal.is-animating .letter-envelope__seal-core{transition:transform .35s cubic-bezier(.2,.9,.2,1)}
+.letter-envelope__seal.is-animating{transform:translateX(-50%) translateY(-6px) scale(1.08);box-shadow:0 24px 46px rgba(200,80,120,0.24)}
+.letter-envelope__seal.is-animating .letter-envelope__seal-core{transform:scale(1.06)}
 .closed-invitation::before,
 .closed-invitation::after{
   content:"✿";
@@ -170,6 +188,52 @@ html{scroll-snap-type:y proximity}
 
   /* Gallery columns reduced earlier — ensure spacing is comfortable */
   .photo-grid{column-gap:10px}
+
+  /* Gallery image entrance and hover animations */
+  .photo-grid .gallery-item{display:block;border-radius:8px;overflow:hidden}
+  .photo-grid .gallery-item img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:transform .45s cubic-bezier(.2,.9,.2,1),box-shadow .45s ease,filter .35s ease,opacity .45s ease;
+    opacity:0;
+    transform:translateY(14px) scale(0.98);
+  }
+  /* animate when the src attribute is present (image loaded) */
+  .photo-grid .gallery-item img[src]{
+    animation:galleryImageIn .56s ease forwards;
+    animation-delay:var(--stagger, 0ms);
+  }
+  @keyframes galleryImageIn{
+    to{opacity:1;transform:translateY(0) scale(1)}
+  }
+  .photo-grid .gallery-item:hover img,
+  .photo-grid .gallery-item:focus img{
+    transform:scale(1.04) translateY(-6px);
+    filter:brightness(1.02) saturate(1.06);
+    box-shadow:0 18px 40px rgba(17,17,15,0.08);
+  }
+
+  /* optional slight stagger using nth-child for a nicer cascade (keeps perf decent)
+     only applies when images are present in the DOM order */
+  .photo-grid .gallery-item:nth-child(4n) img[src]{animation-delay:0.06s}
+  .photo-grid .gallery-item:nth-child(4n+1) img[src]{animation-delay:0.12s}
+  .photo-grid .gallery-item:nth-child(4n+2) img[src]{animation-delay:0.18s}
+  .photo-grid .gallery-item:nth-child(4n+3) img[src]{animation-delay:0.24s}
+
+  /* Compact typography on small screens: reduce heading and body sizes to avoid overflow */
+  .cover-head, .cover-sub, .cover-tagline, .masthead-countdown-time{
+    font-size:clamp(14px,4.5vw,20px);
+  }
+  .story-title, .milestones h3, .families h3, .quiz h3, .appreciation h3{
+    font-size:clamp(20px,6.5vw,28px);
+    line-height:1.08;
+  }
+  .story-article, .story .lead, .story .body-text, .milestone-list p, .sidebar p, .program-sidebar .role-name, .party-col .name{
+    font-size:clamp(13px,3.4vw,15px);
+    line-height:1.5;
+  }
 }
 
 @media (max-width:420px){
@@ -247,11 +311,18 @@ html{scroll-snap-type:y proximity}
   background:linear-gradient(180deg,#fff,#fbf8f3);
 }
 .site-nav{position:sticky;top:12px;z-index:1400}
+
+/* On desktop keep the navbar fixed so it remains visible while scrolling */
+@media (min-width:721px){
+  .site-nav{position:fixed;left:0;right:0;top:12px;z-index:1600}
+  /* ensure page content doesn't hide under the fixed nav */
+  .magazine-wrapper{padding-top:72px}
+}
 .site-nav__inner{display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:1100px;margin:0 auto;padding:12px 16px;background:linear-gradient(180deg,#fff,rgba(255,255,255,0.96));border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
 .site-nav__brand{font-family:'Libre Baskerville',serif;font-size:18px;color:var(--ink);order:0;flex:0 0 auto}
 .site-nav__links{display:flex;gap:18px;align-items:center;flex:1;order:1}
 .site-nav__link{color:var(--muted);text-decoration:none;padding:8px 10px;border-radius:6px;background:transparent;transition:background .3s ease,color .3s ease,box-shadow .3s ease,transform .12s ease}
-.site-nav__link.active{background:#a67c52;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,0.12);border-radius:8px}
+.site-nav__link.active{background:var(--accent);color:#fff;box-shadow:0 6px 18px rgba(0,0,0,0.12);border-radius:8px}
 /* make links visibly respond to press and keyboard focus */
 .site-nav__link{
   transition:background .18s ease,color .12s ease,transform .06s ease,box-shadow .12s ease;
@@ -270,27 +341,30 @@ html{scroll-snap-type:y proximity}
 /* Burger button (hidden on desktop) */
 .site-nav__burger{
   display:none;
-  background:transparent;
+  background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(250,246,247,0.96));
   border:0;
-  padding:6px;
+  padding:8px;
+  width:48px;
+  height:44px;
   cursor:pointer;
-  border-radius:999px;
+  border-radius:12px;
   transition:background .18s ease,box-shadow .18s ease,transform .12s ease;
   -webkit-tap-highlight-color: transparent;
   /* position burger to the end visually */
   order: 2;
   margin-left: auto;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,0.06)
 }
 .site-nav__burger:hover{transform:translateY(-1px)}
 .site-nav__burger:active{transform:translateY(0)}
 .site-nav__burger:focus{outline:none}
 .site-nav__burger:focus-visible{box-shadow:0 0 0 4px rgba(183,159,122,0.12);}
 .site-nav__burger:active{transform:scale(.98)}
-.burger-box{display:inline-block;position:relative;width:34px;height:22px}
-.burger-line{position:absolute;left:4px;right:4px;height:3px;background:#2c2824;border-radius:3px;transition:transform .28s cubic-bezier(.2,.85,.2,1),opacity .18s,background .18s}
-.burger-line:nth-child(1){top:3px;transform-origin:center}
-.burger-line:nth-child(2){top:calc(50% - 1.5px)}
-.burger-line:nth-child(3){bottom:3px;transform-origin:center}
+.burger-box{display:inline-block;position:relative;width:28px;height:18px}
+.burger-line{position:absolute;left:0;right:0;height:2px;background:#6b5b5b;border-radius:2px;transition:transform .28s cubic-bezier(.2,.85,.2,1),opacity .18s,background .18s}
+.burger-line:nth-child(1){top:0;transform-origin:center}
+.burger-line:nth-child(2){top:calc(50% - 1px)}
+.burger-line:nth-child(3){bottom:0;transform-origin:center}
 
 /* open state: transform into X and colorize */
 .site-nav__burger.is-open{background:linear-gradient(180deg,var(--accent),rgba(183,159,122,0.9));box-shadow:0 6px 18px rgba(107,68,35,0.12);}
@@ -315,23 +389,45 @@ html{scroll-snap-type:y proximity}
   .site-nav__sidebar{
     position:fixed;
     top:0;
-    right:-320px; /* hidden off-canvas */
-    width:320px;
+    right:0; /* anchored to right, slide using transform */
+    width:min(88vw,360px);
     height:100vh;
-    background:#fff;
-    box-shadow:-20px 0 40px rgba(0,0,0,0.12);
-    padding:20px 16px;
+    background:rgba(255,255,255,0.72);
+    backdrop-filter: blur(8px) saturate(1.05);
+    -webkit-backdrop-filter: blur(8px) saturate(1.05);
+    box-shadow:-22px 40px 80px rgba(0,0,0,0.12);
+    padding:20px 18px;
     display:flex;
     flex-direction:column;
     gap:12px;
-    transition:right .32s cubic-bezier(.2,.85,.2,1);
+    transform:translateX(110%);
+    transition:transform .36s cubic-bezier(.2,.9,.2,1),opacity .24s ease;
     z-index:2100;
+    border-radius:12px 0 0 12px;
+    border-left:1px solid rgba(255,255,255,0.4);
+    overflow:auto;
   }
   /* visible when open */
-  .site-nav__sidebar.is-open{right:0}
+  .site-nav__sidebar.is-open{transform:translateX(0)}
 
-  .site-nav__sidebar .site-nav__link{display:block;padding:12px 10px;border-bottom:1px solid var(--rule);color:var(--ink);background:transparent;border-radius:8px}
+  .site-nav__sidebar .site-nav__link{
+    display:block;
+    padding:14px 12px;
+    border-bottom:1px solid rgba(17,17,15,0.04);
+    color:var(--ink);
+    background:linear-gradient(180deg,rgba(255,255,255,0.0),rgba(255,255,255,0.02));
+    border-radius:10px;
+    font-size:1rem;
+    transition:transform .18s ease,box-shadow .18s ease,background .18s ease;
+  }
   .site-nav__sidebar .site-nav__link:last-child{border-bottom:0}
+  .site-nav__sidebar .site-nav__link:hover{transform:translateX(4px);box-shadow:0 10px 30px rgba(17,17,15,0.06)}
+  .site-nav__sidebar .site-nav__link.active{background:linear-gradient(180deg,var(--accent),color-mix(in srgb, var(--accent) 60%, white));color:#fff;box-shadow:0 10px 30px rgba(0,0,0,0.12)}
+
+  /* backdrop when sidebar opens */
+  .site-nav__backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.28);opacity:0;pointer-events:none;transition:opacity .22s ease;z-index:2050}
+  /* when sidebar is open, make backdrop visible */
+  .site-nav__sidebar.is-open ~ .site-nav__backdrop{opacity:1;pointer-events:auto}
 
 /* Force burger to remain visible on mobile scroll: highest-priority mobile overrides */
 @media (max-width:720px){
@@ -999,7 +1095,7 @@ html{scroll-snap-type:y proximity}
 
 .invite-band{
   margin-top:22px;
-  background:linear-gradient(90deg,#a68b6a 0%,var(--accent) 35%,#c4a882 70%,var(--accent) 100%);
+  background:linear-gradient(90deg,#b88a6e 0%,var(--accent) 35%,#d19b78 70%,var(--accent) 100%);
   color:#fff;
   padding:clamp(14px,4vw,20px) clamp(12px,4vw,16px);
   text-align:center;
@@ -1123,10 +1219,10 @@ html{scroll-snap-type:y proximity}
 .bubble .desc{font-size:14px;color:var(--muted)}
 
 /* use the existing color classes but keep them as outline colors (they define currentColor) */
-.color-1{color:#f4b942}
-.color-2{color:#9fe0b6}
-.color-3{color:#9b9b9b}
-.color-4{color:#f6d24a}
+.color-1{color:var(--sw-3)} /* warm rust */
+.color-2{color:var(--sw-8)} /* soft neutral */
+.color-3{color:var(--sw-7)} /* muted brown */
+.color-4{color:var(--sw-4)} /* deep rust accent */
 
 /* connector node at center line */
 .timeline-item .node{
@@ -1138,10 +1234,10 @@ html{scroll-snap-type:y proximity}
 }
 
 /* ensure node border color follows the bubble's color (bubble is the colored element) */
-.bubble.color-1 + .node{border-color:#f4b942}
-.bubble.color-2 + .node{border-color:#9fe0b6}
-.bubble.color-3 + .node{border-color:#9b9b9b}
-.bubble.color-4 + .node{border-color:#f6d24a}
+.bubble.color-1 + .node{border-color:var(--sw-3)}
+.bubble.color-2 + .node{border-color:var(--sw-8)}
+.bubble.color-3 + .node{border-color:var(--sw-7)}
+.bubble.color-4 + .node{border-color:var(--sw-4)}
 
 /* small pointer from bubble to central line */
 .timeline-item--left .bubble{clip-path:polygon(0 0,100% 0,100% 100%, 8% 100%, 0 86%)}
@@ -1397,8 +1493,8 @@ html{scroll-snap-type:y proximity}
 .milestone-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
 .milestone-list li{display:flex;gap:12px;align-items:flex-start}
 .milestone-icon{
-  width:34px;height:34px;border:1px solid var(--rule);border-radius:999px;
-  display:inline-flex;align-items:center;justify-content:center;background:#fff;
+  width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;
+  color:var(--accent); /* SVGs inherit currentColor */
 }
 .milestone-list strong{
   display:block;
@@ -1414,6 +1510,18 @@ html{scroll-snap-type:y proximity}
   font-size:clamp(15px,2vw,17px);
   line-height:1.55;
   color:#4a4540;
+}
+
+/* Responsive fixes: ensure milestone text wraps and layout collapses to one column on small screens */
+@media (max-width:640px){
+  .milestones{grid-template-columns:1fr;gap:12px;padding:18px 0}
+  .milestone-list{gap:10px}
+  .milestone-list li{display:flex;gap:10px;align-items:flex-start}
+  .milestone-list li > div{flex:1;min-width:0}
+  .milestone-list strong{font-size:1rem}
+  .milestone-list p{margin-top:6px;word-break:break-word;overflow-wrap:anywhere}
+  .milestone-icon{width:28px;height:28px}
+  .location-icon{font-size:22px}
 }
 .milestones-right,
 .quiz-right{
@@ -2183,6 +2291,25 @@ html{scroll-snap-type:y proximity}
   .wedding-party .ceremonial-grid{flex-direction:column;gap:6px}
 }
 
+/* Wedding party entrance animations */
+.wedding-party .party-title{
+  opacity:0;
+  transform:translateY(18px) scale(0.98);
+  animation:partyTitleIn .8s ease forwards .15s;
+}
+.wedding-party .party-block{
+  opacity:0;
+  transform:translateY(12px) scale(0.995);
+  animation:partyBlockIn .9s ease forwards .28s;
+}
+
+@keyframes partyTitleIn{
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+@keyframes partyBlockIn{
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
 .details-box{background:linear-gradient(#fff,#fbfbfb);border:1px solid var(--rule);padding:14px;margin-bottom:12px}
 .details-box .details-title{
   font-family:'Libre Baskerville',serif;
@@ -2556,11 +2683,16 @@ html{scroll-snap-type:y proximity}
   position:relative;
   z-index:2;
 }
-.cover-loading-rings{
-  font-size:36px;
-  letter-spacing:10px;
-  margin-bottom:8px;
-}
+.cover-loading-rings{display:flex;gap:20px;justify-content:center;align-items:center;margin-bottom:12px;perspective:1000px}
+.ring-wrap{position:relative;display:inline-block;width:72px;height:72px;transform-style:preserve-3d}
+.ring-wrap--back{transform:translateX(12px) translateY(6px) scale(0.92)}
+.ring-wrap:before{content:'';position:absolute;inset:0;border-radius:50%;pointer-events:none;z-index:2;background:linear-gradient(180deg,rgba(255,255,255,0.22),rgba(255,255,255,0.04));mix-blend-mode:screen;opacity:0.95;transform:translateZ(20px) scale(1.02)}
+.cover-loading-ring{width:100%;height:100%;object-fit:contain;display:block;border-radius:50%;filter:drop-shadow(0 18px 28px rgba(0,0,0,0.22));transform-origin:center;transition:transform .45s cubic-bezier(.2,.9,.2,1),filter .2s ease}
+.ring-wrap:hover .cover-loading-ring{transform:translateZ(14px) rotateX(6deg) rotateY(2deg) scale(1.04)}
+
+@keyframes ringFloat{0%{transform:translateY(0) rotateX(6deg) rotateY(-6deg)}50%{transform:translateY(-8px) rotateX(4deg) rotateY(-4deg)}100%{transform:translateY(0) rotateX(6deg) rotateY(-6deg)}}
+.ring-wrap .cover-loading-ring{animation:ringFloat 3.6s ease-in-out infinite}
+.ring-wrap--back .cover-loading-ring{animation-duration:4.2s}
 .cover-loading-text{
   margin:0 0 16px;
   font-family:var(--font-display);

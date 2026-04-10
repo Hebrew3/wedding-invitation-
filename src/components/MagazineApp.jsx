@@ -3,6 +3,7 @@ import Cover from './Cover'
 import Sections from './Sections'
 import Navbar from './Navbar'
 import '../styles/magazine.css'
+import ringImg from '../assets/ringg.png'
 
 export default function MagazineApp() {
   const [phase, setPhase] = useState('cover')
@@ -47,7 +48,6 @@ export default function MagazineApp() {
     audio.currentTime = 0
     audio.play().catch((err) => {
       // ignore play errors (autoplay policy); log in dev
-      // eslint-disable-next-line no-console
       console.debug('audio.play failed', err)
     })
   }, [phase])
@@ -123,7 +123,14 @@ export default function MagazineApp() {
             ))}
           </div>
           <div className="cover-loading-card">
-            <div className="cover-loading-rings" aria-hidden>💍 💍</div>
+            <div className="cover-loading-rings" aria-hidden>
+              <span className="ring-wrap">
+                <img src={ringImg} alt="rings" className="cover-loading-ring" />
+              </span>
+              <span className="ring-wrap ring-wrap--back">
+                <img src={ringImg} alt="rings" className="cover-loading-ring" />
+              </span>
+            </div>
             <p className="cover-loading-text">
               With love special guest, we invite you to celebrate!
             </p>
