@@ -205,7 +205,7 @@ export default function Sections() {
           <strong className="masthead-countdown-time">{countdownText}</strong>
         </div>
 
-        <h1 className="cover-head">ERIC & DIANE</h1>
+        <h2 className="cover-head">ERIC & DIANE</h2>
         <h2 className="cover-sub">Are Getting Married on April 28, 2026</h2>
 
         <div className="cover-grid">

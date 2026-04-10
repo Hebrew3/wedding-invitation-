@@ -108,6 +108,14 @@ html{scroll-snap-type:y proximity}
     padding:10px;
   }
 
+
+  /* Keep wedding date on one line on small screens */
+  .cover-wedding-date{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:clip;
+    font-size:clamp(10px,3.5vw,16px);
+  }
   /* Make story pages flow naturally and reduce large min-heights */
   .story-page{
     min-height:auto;
@@ -165,17 +173,17 @@ html{scroll-snap-type:y proximity}
 
 /* Additional responsive fixes to avoid overlap on medium devices/tablets */
 @media (max-width:1100px){
-  /* Make cover area stack earlier to avoid overlapping side panel */
-  .cover-grid{grid-template-columns:1fr;gap:20px}
-  .cover-photo{order:1;padding-left:0}
-  .cover-grid > .party-card.program-sidebar{order:2}
-  /* Remove vertical dotted rule which can overflow */
-  .party-card::after{display:none}
-  /* Relax hero image aspect-ratio so it scales naturally */
-  .cover-photo .photo-wrap{aspect-ratio:auto;max-height:56vh}
-  .cover-photo .photo-wrap img{width:100%;height:auto;object-fit:cover}
-  /* Reduce large paddings that cause overflow */
-  .magazine{padding:12px;margin:12px}
+  .couple-names{
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:clip !important;
+    /* aggressive mobile sizing to force one line on small phones */
+    font-size:clamp(8px,7.2vw,20px) !important;
+    letter-spacing:0 !important;
+    line-height:1 !important;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
 }
 
 @media (max-width:980px){
@@ -407,17 +415,40 @@ html{scroll-snap-type:y proximity}
   position:relative;
   z-index:5;
   font-family:'Libre Baskerville',serif;
-  /* Responsive scaling: large on desktop, medium on tablet, smaller on mobile */
-  font-size:clamp(28px,8.5vw,72px);
+  /* Keep same font/style; force single-line and scale responsively */
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:clip;
+  font-size:clamp(14px,6.8vw,72px);
   margin:18px 0;
   color:var(--ink);
   line-height:1.02;
-  word-break:break-word;
-  hyphens:auto;
+  word-break:normal;
+  hyphens:none;
   text-align:center; /* ensure always centered */
   max-width:min(92%,46ch); /* avoid extremely long lines */
   margin-left:auto;
   margin-right:auto;
+}
+
+/* Mobile: shrink more aggressively so the headline fits on a single line */
+@media (max-width:420px){
+  .couple-names{
+    font-size:clamp(10px,8.5vw,22px) !important;
+    letter-spacing:0 !important;
+    line-height:1 !important;
+  }
+}
+
+/* Mobile: force headline to one line and scale down to fit small viewports */
+@media (max-width:420px){
+  .couple-names{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:clip;
+    font-size:clamp(10px,7.5vw,24px);
+    letter-spacing:0.01em;
+  }
 }
 .open-btn{margin-top:20px;padding:12px 22px;border:1px solid rgba(0,0,0,0.06);background:transparent;cursor:pointer;font-weight:600}
 
@@ -442,6 +473,26 @@ html{scroll-snap-type:y proximity}
   flex-direction:column;
   align-items:center;
   min-height:168px;
+}
+
+/* Strong mobile override: force headline, date and subheading on one line on small phones */
+@media (max-width:420px){
+  .couple-names, .cover-wedding-date, .cover-sub{
+    white-space:nowrap !important;
+    overflow:visible !important; /* allow text to render even if tight */
+    text-overflow:clip !important;
+    /* slightly smaller scaling so the subheading fits more comfortably */
+    font-size:clamp(7px,5.6vw,16px) !important;
+    letter-spacing:0 !important;
+    line-height:1 !important;
+    margin:8px auto !important;
+    display:block !important;
+    text-align:center !important;
+  }
+  /* Make the subheading a bit smaller specifically so it fits one line more reliably */
+  .cover-sub{
+    font-size:clamp(6px,4.6vw,14px) !important;
+  }
 }
 .envelope{width:220px;height:140px;position:relative;transform-style:preserve-3d;margin:0 auto;flex-shrink:0}
 .envelope-body{background:#fff;border:1px solid var(--rule);height:100%;border-radius:4px;box-shadow:0 18px 40px rgba(0,0,0,0.12);transition:box-shadow .4s,transform .5s}
@@ -820,7 +871,10 @@ html{scroll-snap-type:y proximity}
   color:var(--accent);
   letter-spacing:0.02em;
   line-height:1.05;
-  word-break:break-word;
+  /* keep the same elegant style but force single-line behavior */
+  white-space:nowrap; /* force one line */
+  overflow:hidden;
+  text-overflow:clip;
 }
 .cover-sub{font-family:'Libre Baskerville',serif;font-size:clamp(20px,2.8vw,28px);text-align:center;margin:0 0 16px;font-style:italic;color:var(--muted);line-height:1.35}
 
@@ -852,6 +906,15 @@ html{scroll-snap-type:y proximity}
 
 @media (max-width:420px){
   .couple-names{font-size:clamp(18px,10vw,32px);line-height:1.02}
+  /* Shrink the cover heading on narrow viewports so it fits one line */
+  .cover-head{
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:clip !important;
+    font-size:clamp(12px,8.2vw,28px) !important;
+    letter-spacing:0 !important;
+    line-height:1 !important;
+  }
   .cover-tagline{font-size:clamp(14px,6.5vw,24px);max-width:94%}
 }
 .party-title{
