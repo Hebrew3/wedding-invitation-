@@ -407,12 +407,17 @@ html{scroll-snap-type:y proximity}
   position:relative;
   z-index:5;
   font-family:'Libre Baskerville',serif;
-  font-size:clamp(30px,10vw,64px);
+  /* Responsive scaling: large on desktop, medium on tablet, smaller on mobile */
+  font-size:clamp(28px,8.5vw,72px);
   margin:18px 0;
   color:var(--ink);
-  line-height:1.05;
+  line-height:1.02;
   word-break:break-word;
   hyphens:auto;
+  text-align:center; /* ensure always centered */
+  max-width:min(92%,46ch); /* avoid extremely long lines */
+  margin-left:auto;
+  margin-right:auto;
 }
 .open-btn{margin-top:20px;padding:12px 22px;border:1px solid rgba(0,0,0,0.06);background:transparent;cursor:pointer;font-weight:600}
 
@@ -819,24 +824,35 @@ html{scroll-snap-type:y proximity}
 }
 .cover-sub{font-family:'Libre Baskerville',serif;font-size:clamp(20px,2.8vw,28px);text-align:center;margin:0 0 16px;font-style:italic;color:var(--muted);line-height:1.35}
 
-.cover-grid{
-  display:grid;
-  grid-template-columns:minmax(0,300px) minmax(0,1fr);
-  gap:clamp(16px,3vw,24px);
-  align-items:start;
-  min-width:0;
-}
-.party-card{background:linear-gradient(#fff,#fff);border:1px solid var(--rule);padding:18px}
-.party-title{background:#f5e5c9;padding:10px;font-weight:700;margin-bottom:12px;text-align:center}
-.party-list .small{font-size:13px;color:var(--muted);margin-bottom:10px}
-
-/* Panel styling for left party-card to match the newspaper-style panel */
-.party-card{
-  background:#fff;
-  border:1px solid rgba(0,0,0,0.06);
-  padding:18px 20px;
-  box-shadow: 0 2px 0 rgba(0,0,0,0.02) inset;
+.cover-tagline{
   position:relative;
+  z-index:8;
+  margin:14px auto 0;
+  max-width:22em;
+  font-family:'Great Vibes',cursive;
+  /* Slightly reduce size on small screens while keeping style */
+  font-size:clamp(20px,5vw,44px);
+  line-height:1.35;
+  color:#3d3229;
+  font-weight:400;
+  text-shadow:
+    0 0 0.5px rgba(255,255,255,1),
+    0 1px 0 rgba(255,255,255,1),
+    0 2px 12px rgba(255,252,248,0.95),
+    0 0 24px rgba(255,255,255,0.6);
+  text-align:center;
+}
+
+/* Tighten spacing and sizes specifically for small screens */
+@media (max-width:640px){
+  .couple-names{font-size:clamp(20px,8.5vw,36px);line-height:1.04}
+  .cover-tagline{font-size:clamp(16px,5.6vw,28px);max-width:90%}
+  .cover-inner{padding:18px}
+}
+
+@media (max-width:420px){
+  .couple-names{font-size:clamp(18px,10vw,32px);line-height:1.02}
+  .cover-tagline{font-size:clamp(14px,6.5vw,24px);max-width:94%}
 }
 .party-title{
   background:#f6e1b9; /* soft yellow */
@@ -2164,6 +2180,49 @@ html{scroll-snap-type:y proximity}
   display:flex;
   align-items:center;
   justify-content:center;
+}
+.letter-envelope__seal{cursor:pointer}
+.letter-envelope__seal:focus{outline:none;box-shadow:0 0 0 6px rgba(214,120,150,0.14)}
+
+/* Hover pulse/glow */
+.letter-envelope__seal:hover{animation:sealPulse 1.6s infinite ease-in-out;transform-origin:center}
+@keyframes sealPulse{
+  0%{transform:translateX(-50%) scale(1)}
+  50%{transform:translateX(-50%) scale(1.03)}
+  100%{transform:translateX(-50%) scale(1)}
+}
+
+/* Press / click animation: quick press then pop */
+.letter-envelope__seal.is-animating{animation:sealPress 0.8s ease-in-out both}
+@keyframes sealPress{
+  0%{transform:translateX(-50%) scale(1)}
+  20%{transform:translateX(-50%) scale(0.95)}
+  60%{transform:translateX(-50%) scale(1.05)}
+  100%{transform:translateX(-50%) scale(1)}
+}
+
+/* When the parent has preopen, tilt/zoom the card and open the flap */
+.closed-invitation.preopen{transform:translateY(-6px) scale(1.02) rotateX(2deg);transition:transform 0.6s ease-in-out;box-shadow:0 30px 80px rgba(17,17,15,0.12)}
+.closed-invitation.preopen .letter-envelope__flap{transform:translateX(-50%) rotateX(-160deg);transition:transform 0.85s cubic-bezier(.2,.85,.22,1)}
+.closed-invitation.preopen .letter-envelope__seal{box-shadow:0 22px 34px rgba(125,55,85,0.28), inset 0 3px 8px rgba(255,255,255,0.38);transform:translateX(-50%) scale(1.06)}
+
+/* small ripple / light flash when opening */
+.letter-envelope__seal.is-animating::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:8px;
+  height:8px;
+  background:rgba(255,255,255,0.6);
+  border-radius:50%;
+  transform:translate(-50%,-50%) scale(1);
+  animation:sealFlash 0.8s ease-in-out forwards;
+}
+@keyframes sealFlash{
+  0%{opacity:1;transform:translate(-50%,-50%) scale(0.6)}
+  30%{opacity:0.9;transform:translate(-50%,-50%) scale(1.6)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(3.6)}
 }
 .letter-envelope__seal-core{
   font-family:var(--font-display);
