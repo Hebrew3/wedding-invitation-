@@ -222,6 +222,22 @@ html{scroll-snap-type:y proximity}
   .photo-grid .gallery-item:nth-child(4n+2) img[src]{animation-delay:0.18s}
   .photo-grid .gallery-item:nth-child(4n+3) img[src]{animation-delay:0.24s}
 
+  /* Video player overlay fixes: ensure our overlay fully blocks the iframe until
+     the user intentionally loads the iframe. This prevents native play controls
+     or other iframe chrome from appearing underneath and overlapping on mobile. */
+  .video-player-wrap{width:100%;max-width:980px;margin:0 auto}
+  .video-player-wrap .video-play-overlay{
+    z-index:6; /* above iframe */
+    pointer-events:auto; /* ensure clicks hit this overlay */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  /* Make the overlay area slightly larger on small screens to avoid accidental
+     taps near the iframe edges which sometimes trigger native controls. */
+  @media (max-width:640px){
+    .video-player-wrap .video-play-overlay{font-size:56px}
+  }
+
   /* Compact typography on small screens: reduce heading and body sizes to avoid overflow */
   .cover-head, .cover-sub, .cover-tagline, .masthead-countdown-time{
     font-size:clamp(14px,4.5vw,20px);
@@ -523,40 +539,48 @@ html{scroll-snap-type:y proximity}
   position:relative;
   z-index:5;
   font-family:'Libre Baskerville',serif;
-  /* Keep same font/style; force single-line and scale responsively */
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:clip;
-  font-size:clamp(14px,6.8vw,72px);
-  margin:18px 0;
+  font-size:clamp(40px,9vw,120px);
+  margin:12px 0 6px;
   color:var(--ink);
-  line-height:1.02;
-  word-break:normal;
-  hyphens:none;
-  text-align:center; /* ensure always centered */
-  max-width:min(92%,46ch); /* avoid extremely long lines */
+  line-height:0.98;
+  text-align:center;
+  max-width:min(92%,48ch);
   margin-left:auto;
   margin-right:auto;
+  white-space:normal; /* allow wrapping */
+  hyphens:auto;
 }
 
 /* Mobile: shrink more aggressively so the headline fits on a single line */
 @media (max-width:420px){
   .couple-names{
-    font-size:clamp(10px,8.5vw,22px) !important;
+    font-size:clamp(20px,7.5vw,40px) !important;
     letter-spacing:0 !important;
-    line-height:1 !important;
+    line-height:1.02 !important;
   }
 }
 
 /* Mobile: force headline to one line and scale down to fit small viewports */
 @media (max-width:420px){
   .couple-names{
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:clip;
-    font-size:clamp(10px,7.5vw,24px);
-    letter-spacing:0.01em;
+    font-size:clamp(18px,8.5vw,36px);
+    line-height:1.03;
+    letter-spacing:0;
   }
+
+/* Tagline: allow multi-line and better spacing */
+.cover-tagline{
+  font-family:'Great Vibes',cursive,'Times New Roman',serif;
+  font-size:clamp(20px,5.5vw,40px);
+  color:var(--accent);
+  margin-top:8px;
+  margin-bottom:18px;
+  line-height:1.08;
+  text-align:center;
+  max-width:86%;
+  margin-left:auto;
+  margin-right:auto;
+}
 }
 .open-btn{margin-top:20px;padding:12px 22px;border:1px solid rgba(0,0,0,0.06);background:transparent;cursor:pointer;font-weight:600}
 

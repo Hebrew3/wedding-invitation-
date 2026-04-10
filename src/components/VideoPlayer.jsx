@@ -2,21 +2,29 @@ import React, { useState } from 'react'
 
 export default function VideoPlayer({ fileId, title = 'Wedding video' }) {
   const [overlayVisible, setOverlayVisible] = useState(true)
+  const [iframeSrc, setIframeSrc] = useState(null)
   if (!fileId) return null
   const previewUrl = `https://drive.google.com/file/d/${fileId}/preview`
   const viewUrl = `https://drive.google.com/file/d/${fileId}/view?usp=sharing`
+
+  // prefer to declare all hooks before any early return to keep hook order stable
 
   function handlePlayTrigger() {
     // notify the app to pause background music
     try {
       window.dispatchEvent(new CustomEvent('app:video-play'))
     } catch (err) {
-      // best-effort event dispatch, logging failures helps debugging in dev
-      // (don't throw — silent fail in production)
-      // eslint-disable-next-line no-console
+      // best-effort event dispatch; don't throw in production
       console.debug('dispatch app:video-play failed', err)
     }
-    // hide overlay so user can interact with iframe
+    // Set iframe src. We'll remove the overlay once the iframe reports it's loaded
+    // to avoid the native player UI appearing under our overlay on some mobile browsers.
+    setIframeSrc(previewUrl)
+  }
+
+  function handleIframeLoad() {
+    // hide our overlay once iframe content is ready. This avoids native
+    // player controls appearing underneath our custom overlay on some mobile browsers.
     setOverlayVisible(false)
   }
 
@@ -50,8 +58,10 @@ export default function VideoPlayer({ fileId, title = 'Wedding video' }) {
 
         <iframe
           title={title}
-          src={previewUrl}
+          src={iframeSrc || undefined}
+          onLoad={iframeSrc ? handleIframeLoad : undefined}
           allow="autoplay; encrypted-media; fullscreen"
+          allowFullScreen
           style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
         />
       </div>
