@@ -125,10 +125,7 @@ export default function MagazineApp() {
           <div className="cover-loading-card">
             <div className="cover-loading-rings" aria-hidden>
               <span className="ring-wrap">
-                <img src={ringImg} alt="rings" className="cover-loading-ring" />
-              </span>
-              <span className="ring-wrap ring-wrap--back">
-                <img src={ringImg} alt="rings" className="cover-loading-ring" />
+                <img src={ringImg} alt="ring" className="cover-loading-ring" />
               </span>
             </div>
             <p className="cover-loading-text">

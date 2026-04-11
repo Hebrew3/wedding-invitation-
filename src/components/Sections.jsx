@@ -315,7 +315,13 @@ export default function Sections() {
                     <h3>GROOM'S MAN</h3>
                     <p className="role-name">Rhenier A. De Jesus</p>
                   </div>
+                </div>
+              </div>
+              <div className="party-group party-kids">
+                <h2>KIDS</h2>
+                <div className="entourage-grid">
                   <div className="entourage-item">
+                     <div className="entourage-item">
                     <h3>BIBLE BEARER</h3>
                     <p className="role-name">Kian Pulot</p>
                   </div>
@@ -327,13 +333,6 @@ export default function Sections() {
                     <h3>COIN BEARER</h3>
                     <p className="role-name">Marcus Ethan C. Reyes</p>
                   </div>
-                </div>
-              </div>
-
-              <div className="party-group party-kids">
-                <h2>KIDS</h2>
-                <div className="entourage-grid">
-                  <div className="entourage-item">
                     <h3>LITTLE GENTS</h3>
                     <p className="role-name">Jan Amenadiel C. Macalalald</p>
                     <p className="role-name">Liam  M. Legaspi</p>
@@ -569,7 +568,7 @@ export default function Sections() {
             </li>
             <li>
               <span className="milestone-icon"><IconParty /></span>
-              <div><strong>Pamamanhikan/Bulungan</strong><p>January 08, 2026</p></div>
+              <div><strong>Pamamanhikan/Bulungan</strong><p>January 18, 2026</p></div>
             </li>
             <li>
               <span className="milestone-icon"><IconHeart /></span>
