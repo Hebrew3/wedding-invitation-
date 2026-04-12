@@ -672,6 +672,13 @@ export default function Sections() {
       </section>
 
   <section id="gallery" className="gallery fade-up">
+        {/* Featured video - placed before gallery highlights */}
+        <div className="video-feature">
+          <div className="invite-band">Eric &amp; Diane — Engagement Session</div>
+          <div className="video-section" style={{ margin: '1.25rem 0' }}>
+            <VideoPlayer fileId="1f-MXLy5gnTXunU7pKzmJtDG-bIYcHIcq" title="Prenup Video" />
+          </div>
+        </div>
         <h3>Gallery</h3>
         <div className="photo-grid masonry">
           {galleryAssets.length ? (
