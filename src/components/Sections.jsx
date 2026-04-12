@@ -226,8 +226,8 @@ export default function Sections() {
           <strong className="masthead-countdown-time">{countdownText}</strong>
         </div>
 
-        <h2 className="cover-head">ERIC & DIANE</h2>
-        <h2 className="cover-sub">Are Getting Married on April 28, 2026</h2>
+        <h2 className="cover-head" style={{whiteSpace: 'nowrap', fontSize: '1.8rem'}}>ERIC & DIANE</h2>
+        <h2 className="cover-sub" style={{whiteSpace: 'nowrap', fontSize: '1rem'}}>Are Getting Married on April 28, 2026</h2>
 
         <div className="cover-grid">
           <aside className="party-card program-sidebar">
@@ -289,6 +289,7 @@ export default function Sections() {
                   <div>
                     <h3>TO LIGHT OUR PATH</h3>
                     <p className="paired">Babelyn C. Catalan &amp; Harrie D. Cruzado</p>
+                    <p className="paired">Michellen M. Dayrit &amp; Emerson D. Venzon</p>
                   </div>
 
                   <div>
@@ -363,8 +364,8 @@ export default function Sections() {
           <div style={{maxWidth: 980, margin: '0 auto'}}>
             <div className="details-title" style={{textAlign: 'center', fontSize: '1.5rem', paddingBottom: '0.25rem'}}>The Wedding Details</div>
             <div style={{textAlign: 'center', marginBottom: '0.75rem'}}>
-              <div style={{fontSize: '1.15rem'}}><strong>04.28.2026</strong></div>
-              <div className="muted">Tuesday | Calatagan</div>
+              <div style={{fontSize: '0.95rem', whiteSpace: 'nowrap'}}><strong>04.28.2026</strong></div>
+              <div className="muted" style={{whiteSpace: 'nowrap', fontSize: '0.9rem'}}>Tuesday | Calatagan</div>
             </div>
           </div>
         </div>
@@ -374,24 +375,24 @@ export default function Sections() {
           <div className="location-card">
             <div className="location-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <path d="M12 3l9 7v11a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10l9-7z" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M12 2C6.5 2 2 6.5 2 12c0 7 10 12 10 12s10-5 10-12c0-5.5-4.5-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" fill="currentColor"/>
               </svg>
             </div>
             <div>
               <div className="location-title">Wedding Ceremony</div>
-              <a className="location-link" href="https://www.google.com/maps/search/Sto.+Domingo+de+Silos+Parish+Church+Calatagan" target="_blank" rel="noopener noreferrer">Sto. Domingo de Silos Parish Church, Brgy. 2, Calatagan, Batangas</a>
+              <a className="location-link" href="https://maps.app.goo.gl/2eAbBfHvJ9j7neDD9" target="_blank" rel="noopener noreferrer">Sto. Domingo de Silos Parish Church, Brgy. 2, Calatagan, Batangas</a>
             </div>
           </div>
 
           <div className="location-card">
             <div className="location-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <path d="M3 11.5L12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-8.5z" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M12 2C6.5 2 2 6.5 2 12c0 7 10 12 10 12s10-5 10-12c0-5.5-4.5-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" fill="currentColor"/>
               </svg>
             </div>
             <div>
               <div className="location-title">Wedding Reception</div>
-              <a className="location-link" href="https://www.google.com/maps/search/Maullon+Residence+Luya+Calatagan" target="_blank" rel="noopener noreferrer">Maullon Residence, Luya, Calatagan, Batangas</a>
+              <a className="location-link" href="https://maps.app.goo.gl/22cLX8z8KZRqUYjo8?g_st=ic" target="_blank" rel="noopener noreferrer">Maullon Residence, Luya, Calatagan, Batangas</a>
             </div>
           </div>
         </div>
@@ -671,13 +672,6 @@ export default function Sections() {
       </section>
 
   <section id="gallery" className="gallery fade-up">
-        {/* Featured video - placed before gallery highlights */}
-        <div className="video-feature">
-          <div className="invite-band">Eric &amp; Diane — Engagement Session</div>
-          <div className="video-section" style={{ margin: '1.25rem 0' }}>
-            <VideoPlayer fileId="1f-MXLy5gnTXunU7pKzmJtDG-bIYcHIcq" title="Prenup Video" />
-          </div>
-        </div>
         <h3>Gallery</h3>
         <div className="photo-grid masonry">
           {galleryAssets.length ? (
