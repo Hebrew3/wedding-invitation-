@@ -1795,6 +1795,10 @@ html{scroll-snap-type:y proximity}
 .carousel-dots .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.6);border:0;cursor:pointer;transition:all .2s ease}
 .carousel-dots .dot:hover{background:rgba(255,255,255,0.8)}
 .carousel-dots .dot.active{background:#fff;box-shadow:0 4px 10px rgba(0,0,0,0.18);transform:scale(1.2)}
+
+/* User requested: remove the navigation circles/dots from the gallery/carousel */
+.carousel-dots{display:none !important;visibility:hidden !important}
+.carousel-dots .dot{display:none !important}
 .carousel-caption{position:absolute;left:16px;bottom:16px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,0.6)}
 
 @media (max-width:900px){

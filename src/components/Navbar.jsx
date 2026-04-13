@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useMemo } from 'react'
-import logoImg from '../assets/gallery/loggo.jpg'
 
 export default function Navbar() {
   const links = useMemo(
@@ -73,10 +72,6 @@ export default function Navbar() {
   return (
     <nav className="site-nav" aria-label="Main navigation">
       <div className="site-nav__inner">
-        <a className="site-nav__brand" href="#cover" onClick={(e)=>{e.preventDefault(); document.getElementById('cover')?.scrollIntoView({behavior:'smooth'});}} aria-label="E and D homepage">
-          <img src={logoImg} alt="E & D" style={{height:36, width:'auto', borderRadius:6}} />
-        </a>
-
         <button
           className={`site-nav__burger ${isOpen ? 'is-open' : ''}`}
           aria-expanded={isOpen}
