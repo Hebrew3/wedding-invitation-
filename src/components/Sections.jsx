@@ -18,9 +18,9 @@ import photoCover from '../assets/DSC_7940.jpg'
 import photoStory from '../assets/DSC_7091.jpg'
 import photoFactsMain from '../assets/DSC_7517.jpg'
 import photoHeSaid from '../assets/DSC_7855.jpg'
-import photoThumbOne from '../assets/DSC.jpg'
+import photoThumbOne from '../assets/gallery/DSC.jpg'
 import photoThumbTwo from '../assets/DSC_7091.jpg'
-import photoThumbThree from '../assets/DSC001.jpg'
+import photoThumbThree from '../assets/gallery/DSC001.jpg'
 import photoAltOne from '../assets/DSC_7353.jpg'
 import photoAltTwo from '../assets/DSC_7365.jpg'
 import photoMilestone from '../assets/DSC_7675.jpg'
@@ -291,7 +291,7 @@ export default function Sections() {
                   <li>Mr. Christopher &amp; Mrs. Peñafrancia Tegio</li>
                   <li>Mr. Efren &amp; Mrs. Marissa Bautista</li>
                   <li>Mr. Silverio &amp; Mrs. Aileen Venzon</li>
-                  <li>Mr. Danielle Monro &amp; Ms. Rosalia D. Eleponga</li>
+                  <li>Mr. Daniel Monro &amp; Ms. Rosalia D. Eleponga</li>
                 </ul>
               </div>
 
@@ -617,7 +617,10 @@ export default function Sections() {
                 <tr><td>I said &quot;I love you&quot; first.</td><td>□</td><td>□</td></tr>
                 <tr><td>I am the better cook.</td><td>□</td><td>□</td></tr>
                 <tr><td>I am more organized.</td><td>□</td><td>□</td></tr>
-                <tr><td>I planned the first date.</td><td>□</td><td>□</td></tr>
+                <tr><td>I am more adventurous.</td><td>□</td><td>□</td></tr>
+                 <tr><td>I spend more time on social media.</td><td>□</td><td>□</td></tr>
+                <tr><td>I am more likely to get lost while driving.</td><td>□</td><td>□</td></tr>
+                 <tr><td>I planned the first date.</td><td>□</td><td>□</td></tr>
               </tbody>
             </table>
           </div>

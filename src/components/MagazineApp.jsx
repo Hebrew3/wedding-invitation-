@@ -3,7 +3,7 @@ import Cover from './Cover'
 import Sections from './Sections'
 import Navbar from './Navbar'
 import '../styles/magazine.css'
-import ringImgDefault from '../assets/ringg.png'
+import ringImgDefault from '../assets/gallery/ring.png'
 
 export default function MagazineApp() {
   const [ringImg, setRingImg] = useState(ringImgDefault)
@@ -45,7 +45,7 @@ export default function MagazineApp() {
   // Try to dynamically load a replacement ring.png (preferred) at runtime
   useEffect(() => {
     let mounted = true
-    import('../assets/ring.png')
+  import('../assets/gallery/ring.png')
       .then((m) => {
         if (mounted && m && (m.default || m)) setRingImg(m.default || m)
       })
