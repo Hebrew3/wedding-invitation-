@@ -13,9 +13,11 @@ import {
   IconParty,
   IconHeart,
 } from './Icons'
+import Carousel from './Carousel'
 import photoCover from '../assets/DSC_7940.jpg'
 import photoStory from '../assets/DSC_7091.jpg'
 import photoFactsMain from '../assets/DSC_7517.jpg'
+import photoHeSaid from '../assets/DSC_7855.jpg'
 import photoThumbOne from '../assets/DSC.jpg'
 import photoThumbTwo from '../assets/DSC_7091.jpg'
 import photoThumbThree from '../assets/DSC001.jpg'
@@ -25,13 +27,23 @@ import photoMilestone from '../assets/DSC_7675.jpg'
 import VideoPlayer from './VideoPlayer'
 
 export default function Sections() {
-  const galleryAssetsRaw = window.__GALLERY_ASSETS__?.slice(0, 12) || []
-  // Exclude specific photos from the gallery highlights by filename
-  const excludedFilenames = ['DSC.jpg', 'DSC001.jpg']
-  const galleryAssets = galleryAssetsRaw.filter((src) => {
+  // Load all images from the assets folder into the gallery.
+  // Using Vite's import.meta.globEager to statically include asset URLs.
+  // This gathers every image in src/assets into the gallery.
+  let galleryAssets = []
+  try {
+    const modules = import.meta.globEager('../assets/*.{jpg,jpeg,png,webp}')
+    galleryAssets = Object.values(modules).map((m) => m.default || m)
+  } catch {
+    // Fallback to any server-provided list if glob isn't available
+    galleryAssets = window.__GALLERY_ASSETS__ || []
+  }
+  // Exclude images that should remain dedicated to other sections (Families)
+  const excludedFilenames = new Set(['DSC.jpg', 'DSC001.jpg', 'ringg.png', 'ring.png'])
+  galleryAssets = galleryAssets.filter((src) => {
     try {
       const fname = String(src).split('/').pop()
-      return !excludedFilenames.includes(fname)
+      return !excludedFilenames.has(fname)
     } catch {
       return true
     }
@@ -611,11 +623,11 @@ export default function Sections() {
           </div>
         </div>
         <div className="quiz-right photo-expandable">
-          <img src={photoCover} alt="Couple portrait by the wall" />
+          <img src={photoHeSaid} alt="Couple portrait by the wall" />
           <button
             type="button"
             className="photo-expand-btn"
-            onClick={() => openFullscreen(photoCover, 'Couple portrait by the wall')}
+            onClick={() => openFullscreen(photoHeSaid, 'Couple portrait by the wall')}
             aria-label="View photo full screen"
           >
             <IconExpand className="photo-expand-btn__icon" />
@@ -680,20 +692,9 @@ export default function Sections() {
           </div>
         </div>
         <h3>Gallery</h3>
-        <div className="photo-grid masonry">
-          {galleryAssets.length ? (
-            galleryAssets.map((src, i) => (
-              <button
-                key={i}
-                className="gallery-item"
-                onClick={() => openLightbox(i)}
-                aria-label={`Open image ${i + 1}`}
-              >
-                <img data-src={src} alt={`gallery-${i}`} loading="lazy" />
-              </button>
-            ))
-          ) : null}
-        </div>
+        {galleryAssets.length ? (
+          <Carousel images={galleryAssets} onClick={(i) => openLightbox(i)} autoplay delay={4000} />
+        ) : null}
 
       </section>
       </div>

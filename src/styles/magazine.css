@@ -215,6 +215,87 @@ html{scroll-snap-type:y proximity}
     box-shadow:0 18px 40px rgba(17,17,15,0.08);
   }
 
+/* Carousel & gallery portrait handling: blurred background behind portrait images */
+.carousel-image-wrap{
+  position:relative;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  display:block;
+  isolation:isolate; /* keep backdrop effects contained */
+}
+.carousel-image-bg{
+  position:absolute;
+  inset:0; /* top:0; right:0; bottom:0; left:0 */
+  background-position:center center;
+  background-repeat:no-repeat;
+  background-size:cover; /* scaled to cover container */
+  filter:blur(20px) brightness(0.7);
+  transform:scale(1.05); /* a slight upscale to avoid edge artifacts from blur */
+  transition:opacity .45s ease,transform .45s ease,filter .35s ease;
+  opacity:0; /* only visible for portrait images */
+  z-index:1;
+}
+.carousel-image{
+  position:relative;
+  z-index:2;
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover; /* default for landscape - fills */
+  transition:transform .45s cubic-bezier(.2,.9,.2,1),opacity .35s ease,filter .35s ease;
+  max-width:100%;
+}
+
+/* Portrait images: make the main img centered and contained above the blurred bg */
+.carousel-image.portrait{
+  object-fit:contain; /* ensure full image is visible */
+  max-height:100%;
+  width:auto;
+  margin:0 auto; /* center horizontally */
+  top:50%;
+  transform:translateY(-50%); /* vertically center via transform */
+  position:relative;
+}
+/* When the image is classified portrait, reveal the blurred background layer */
+
+/* Instead use attribute selector on the parent slide to toggle bg visibility when portrait class present on img */
+.carousel-slide .carousel-image-wrap .carousel-image.portrait ~ .carousel-image-bg,
+.carousel-slide .carousel-image-wrap .carousel-image.portrait + .carousel-image-bg{
+  opacity:1;
+}
+
+/* Fallback explicit rule: when portrait class exists on the image, make bg visible by targeting the parent */
+.carousel-slide .carousel-image-wrap .carousel-image.portrait{ /* ensure z-index is above bg */
+  z-index:2;
+}
+.carousel-slide .carousel-image-wrap .carousel-image.portrait ~ .carousel-image-bg{
+  opacity:1;
+}
+
+/* Ensure slides keep their aspect ratio and avoid white gaps */
+.carousel-slide{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:100%;
+  min-height:240px;
+  background:transparent;
+  overflow:hidden;
+}
+
+/* Make carousel responsive */
+@media (max-width:760px){
+  .carousel-slide{min-height:180px}
+}
+
+/* Ensure landscape images still cover the container */
+.carousel-image.landscape{object-fit:cover;width:100%;height:100%}
+
+/* Smooth transitions for background reveal */
+.carousel-image-bg{will-change:opacity,transform,filter}
+
   /* optional slight stagger using nth-child for a nicer cascade (keeps perf decent)
      only applies when images are present in the DOM order */
   .photo-grid .gallery-item:nth-child(4n) img[src]{animation-delay:0.06s}
@@ -1580,10 +1661,11 @@ html{scroll-snap-type:y proximity}
   max-width:100%;
   height:auto;
   max-height:min(75vh,560px);
-  aspect-ratio:3/4;
-  object-fit:cover;
+  /* avoid cropping tall/portrait images */
+  object-fit:contain;
   object-position:center;
   display:block;
+  background:linear-gradient(180deg,#fff,#fbf8f5);
   border:1px solid var(--rule);
 }
 .quiz{
@@ -1664,45 +1746,99 @@ html{scroll-snap-type:y proximity}
   margin:0 auto 18px;
   align-items:start;
 }
-.highlight-item{display:block;width:100%;border:0;padding:0;background:transparent}
+.highlight-item{display:block;width:100%;border:0;padding:0;background:transparent;overflow:hidden;border-radius:6px}
 .highlight-item img{
   width:100%;
   aspect-ratio:4/3;
   object-fit:cover;
   display:block;
   border-radius:6px;
-  transition:transform .25s ease,box-shadow .25s ease;
+  transition:transform .35s cubic-bezier(.2,.9,.2,1),box-shadow .35s ease,filter .25s ease;
+  opacity:0;
+  transform:scale(0.95) translateY(12px);
+  animation:galleryImageLoad .6s cubic-bezier(.2,.9,.2,1) forwards;
+}
+.highlight-item:nth-child(1) img{animation-delay:0.05s}
+.highlight-item:nth-child(2) img{animation-delay:0.1s}
+.highlight-item:nth-child(3) img{animation-delay:0.15s}
+.highlight-item:nth-child(4) img{animation-delay:0.2s}
+.highlight-item:nth-child(5) img{animation-delay:0.25s}
+.highlight-item:nth-child(6) img{animation-delay:0.3s}
+
+@keyframes galleryImageLoad{
+  to{
+    opacity:1;
+    transform:scale(1) translateY(0);
+  }
 }
 
-/* Carousel styles */
+.highlight-item:hover img,
+.highlight-item:focus img{
+  transform:scale(1.06) translateY(-4px);
+  filter:brightness(1.08) saturate(1.12);
+  box-shadow:0 12px 28px rgba(0,0,0,0.18);
+}
+
 .carousel{position:relative;max-width:1100px;margin:0 auto 18px;border-radius:8px;overflow:hidden}
-.carousel-inner{display:flex;position:relative;width:100%;height:360px}
-.carousel-slide{flex:0 0 100%;border:0;padding:0;background:transparent;display:block;position:relative}
-.carousel-slide img{width:100%;height:100%;object-fit:cover;display:block}
-.carousel-slide{opacity:0;transform:scale(.995);transition:opacity .45s ease,transform .45s ease}
-.carousel-slide.is-active{opacity:1;transform:scale(1)}
-.carousel-prev,.carousel-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.45);color:#fff;border:0;padding:8px 12px;border-radius:6px;cursor:pointer}
+/* show only the active slide as a full image */
+.carousel-inner{display:block;position:relative;width:100%;height:auto}
+.carousel-slide{width:100%;border:0;padding:0;background:transparent;display:none;position:relative;opacity:0;visibility:hidden}
+.carousel-slide.is-active{display:block;opacity:1;visibility:visible}
+.carousel-slide img{width:100%;height:auto;max-height:80vh;object-position:center;background:linear-gradient(180deg,#fff,#fbf8f5);display:block}
+.carousel-slide img.landscape{object-fit:cover}
+.carousel-slide img.portrait{object-fit:contain}
+.carousel-prev,.carousel-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.45);color:#fff;border:0;padding:8px 12px;border-radius:6px;cursor:pointer;z-index:10;transition:all .2s ease}
+.carousel-prev:hover,.carousel-next:hover{background:rgba(0,0,0,0.65)}
 .carousel-prev{left:12px}
 .carousel-next{right:12px}
-.carousel-dots{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;display:flex;gap:8px}
-.carousel-dots .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.6);border:0}
-.carousel-dots .dot.active{background:#fff;box-shadow:0 4px 10px rgba(0,0,0,0.18)}
+.carousel-dots{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;display:flex;gap:8px;z-index:10}
+.carousel-dots .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.6);border:0;cursor:pointer;transition:all .2s ease}
+.carousel-dots .dot:hover{background:rgba(255,255,255,0.8)}
+.carousel-dots .dot.active{background:#fff;box-shadow:0 4px 10px rgba(0,0,0,0.18);transform:scale(1.2)}
 .carousel-caption{position:absolute;left:16px;bottom:16px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,0.6)}
 
 @media (max-width:900px){
-  .carousel-inner{height:260px}
+  .carousel-inner{height:450px}
 }
 @media (max-width:480px){
-  .carousel-inner{height:190px}
-  .carousel-prev,.carousel-next{padding:6px 8px}
+  .carousel-inner{height:300px}
+  .carousel-prev,.carousel-next{padding:6px 8px;font-size:20px}
 }
 /* Center the masonry photo grid and constrain max width for large screens */
 .gallery .photo-grid{max-width:1100px;margin:0 auto;column-gap:12px}
 
 .photo-grid{column-count:4}
-.gallery-item{display:inline-block;width:100%;margin:0 0 12px;cursor:pointer;border:0;padding:0;background:transparent}
-.gallery-item img{width:100%;height:auto;display:block;border-radius:4px;transition:transform .35s ease,box-shadow .25s}
-.gallery-item img:hover{transform:scale(1.02);box-shadow:0 10px 22px rgba(0,0,0,0.12)}
+.gallery-item{display:inline-block;width:100%;margin:0 0 12px;cursor:pointer;border:0;padding:0;background:transparent;overflow:hidden;border-radius:4px}
+.gallery-item img{
+  width:100%;
+  height:auto;
+  display:block;
+  border-radius:4px;
+  transition:transform .35s cubic-bezier(.2,.9,.2,1),box-shadow .35s ease,filter .25s ease;
+  opacity:0;
+  transform:scale(0.96);
+  animation:galleryImageLoad .5s cubic-bezier(.2,.9,.2,1) forwards;
+}
+
+/* Hide gallery thumbnails entirely (user requested: no images appear in the gallery) */
+.gallery .photo-grid,
+.gallery .photo-grid img,
+.highlights-grid,
+.highlight-item,
+.gallery-item{
+  display:none !important;
+}
+.gallery-item:nth-child(4n) img{animation-delay:0.06s}
+.gallery-item:nth-child(4n+1) img{animation-delay:0.12s}
+.gallery-item:nth-child(4n+2) img{animation-delay:0.18s}
+.gallery-item:nth-child(4n+3) img{animation-delay:0.24s}
+
+.gallery-item:hover img,
+.gallery-item:focus img{
+  transform:scale(1.05);
+  filter:brightness(1.06) saturate(1.1) contrast(1.05);
+  box-shadow:0 14px 32px rgba(0,0,0,0.16);
+}
 
 /* Masonry: reduce columns on smaller screens */
 @media (max-width:1100px){
@@ -2031,8 +2167,10 @@ html{scroll-snap-type:y proximity}
   height:auto;
   aspect-ratio:16/10;
   max-height:min(50vh,420px);
-  object-fit:cover;
+  /* show the whole image rather than cropping portraits */
+  object-fit:contain;
   object-position:center;
+  background:#fff;
 }
 .family-photo-tile__shine{
   position:absolute;
@@ -2717,81 +2855,152 @@ html{scroll-snap-type:y proximity}
   justify-content:center;
   padding:22px;
   position:relative;
+  /* soft cream -> blush background */
+  background: linear-gradient(180deg, #fff7ea 0%, #fff1f0 60%);
+  overflow:hidden;
 }
 .cover-loading-card{
-  width:min(92vw,620px);
-  border:1px solid rgba(183,159,122,0.32);
-  border-radius:12px;
-  background:linear-gradient(180deg,#fffefb,#f9f3ea);
-  box-shadow:0 18px 48px rgba(17,17,15,0.12);
-  text-align:center;
-  padding:30px 20px;
+  width:min(88vw,620px);
+  max-width:95%;
+  border-radius:16px;
+  padding:34px 26px;
   position:relative;
-  z-index:2;
+  z-index:6;
+  text-align:center;
+  /* glassy card with subtle border */
+  background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,250,246,0.6));
+  border: 1px solid rgba(255,255,255,0.35);
+  box-shadow: 0 18px 40px rgba(30,20,20,0.12), inset 0 1px 0 rgba(255,255,255,0.4);
+  backdrop-filter: blur(8px) saturate(1.05);
+  -webkit-backdrop-filter: blur(8px) saturate(1.05);
+  transform-origin:center;
+  /* float animation */
+  animation:cardFloatIn 700ms cubic-bezier(.2,.9,.2,1), cardFloat 6s ease-in-out infinite 900ms;
 }
 .cover-loading-rings{display:flex;justify-content:center;align-items:center;margin-bottom:12px;perspective:1000px}
-.ring-wrap{position:relative;display:inline-block;width:72px;height:72px;transform-style:preserve-3d}
-.ring-wrap:before{content:'';position:absolute;inset:0;border-radius:50%;pointer-events:none;z-index:2;background:linear-gradient(180deg,rgba(255,255,255,0.22),rgba(255,255,255,0.04));mix-blend-mode:screen;opacity:0.95;transform:translateZ(20px) scale(1.02)}
-.cover-loading-ring{width:100%;height:100%;object-fit:contain;display:block;border-radius:50%;filter:drop-shadow(0 18px 28px rgba(0,0,0,0.22));transform-origin:center;transition:transform .45s cubic-bezier(.2,.9,.2,1),filter .2s ease}
-.ring-wrap:hover .cover-loading-ring{transform:translateZ(14px) rotateX(6deg) rotateY(2deg) scale(1.04)}
+.ring-wrap{position:relative;display:inline-block;width:86px;height:86px;transform-style:preserve-3d}
+.ring-wrap:before{content:'';position:absolute;inset:0;border-radius:50%;pointer-events:none;z-index:2;background:radial-gradient(ellipse at center, rgba(255,255,255,0.32), rgba(255,255,255,0.02));mix-blend-mode:screen;opacity:0.95;transform:translateZ(20px) scale(1.02)}
+.cover-loading-ring{width:100%;height:100%;object-fit:contain;display:block;border-radius:50%;filter:drop-shadow(0 18px 36px rgba(0,0,0,0.12));transform-origin:center;transition:transform .45s cubic-bezier(.2,.9,.2,1),filter .2s ease}
+.ring-wrap:hover .cover-loading-ring{transform:translateZ(10px) rotateX(6deg) rotateY(2deg) scale(1.06)}
 
 @keyframes ringFloat{0%{transform:translateY(0) rotateX(6deg) rotateY(-6deg)}50%{transform:translateY(-8px) rotateX(4deg) rotateY(-4deg)}100%{transform:translateY(0) rotateX(6deg) rotateY(-6deg)}}
-.ring-wrap .cover-loading-ring{animation:ringFloat 3.6s ease-in-out infinite}
+.ring-wrap .cover-loading-ring{animation:ringFloat 4.6s ease-in-out infinite, ringSpin 6s linear infinite}
+.ring-sparkle{position:absolute;left:50%;top:20%;transform:translate(-50%,-50%);pointer-events:none;z-index:8;mix-blend-mode:screen;opacity:0.95}
+.ring-sparkle:before{content:'';width:8px;height:8px;border-radius:2px;background:linear-gradient(90deg,#fff8e6,#ffecd3);box-shadow:0 0 18px rgba(255,218,190,0.7);display:block;filter:blur(0.6px);animation:twinkle 2.6s linear infinite}
 .cover-loading-text{
-  margin:0 0 16px;
-  font-family:var(--font-display);
-  font-size:clamp(22px,4vw,34px);
-  line-height:1.22;
+  margin:0 0 18px;
+  font-family: 'Playfair Display', var(--font-display, serif);
+  font-weight:500;
+  font-size:clamp(20px,4vw,34px);
+  line-height:1.18;
   color:#6f4f57;
+  letter-spacing:0.02em;
+  opacity:0;
+  transform:translateY(6px);
+  animation:loaderTextIn 900ms ease 420ms forwards;
 }
 .cover-loading-bar{
-  width:min(86%,420px);
-  height:26px;
-  margin:0 auto;
-  border:4px solid #221f20;
-  border-radius:14px;
-  background:#fff;
+  width:min(86%,460px);
+  height:18px;
+  margin:8px auto 0;
+  border-radius:24px;
+  background:rgba(255,255,255,0.6);
+  box-shadow: inset 0 -1px 6px rgba(0,0,0,0.06);
+  position:relative;
   overflow:hidden;
+  border: 1px solid rgba(0,0,0,0.08);
 }
 .cover-loading-bar__fill{
   display:block;
   height:100%;
   width:0;
-  background:linear-gradient(90deg,#f0bfd3,#dc8eb0 52%,#c36990);
-  animation:coverLoadingFill 5s linear forwards;
+  border-radius:20px;
+  background: linear-gradient(90deg, #f7b1c5 0%, #f2c9b6 40%, #eaa3b1 70%, #f6d7c2 100%);
+  box-shadow: 0 6px 18px rgba(243,166,181,0.16);
+  background-size: 200% 100%;
+  animation:coverLoadingFill 5s cubic-bezier(.2,.9,.2,1) forwards, gradientShift 3.6s linear infinite;
+  position:relative;
+}
+.cover-loading-bar__fill:after{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:20px;
+  box-shadow:0 0 18px rgba(246,169,185,0.18);
+  pointer-events:none;
 }
 .loading-hearts{
   position:absolute;
   inset:0;
   pointer-events:none;
   overflow:hidden;
-  z-index:1;
+  z-index:4;
 }
 .loading-heart{
   position:absolute;
-  bottom:-12%;
-  color:rgba(199,58,93,0.6);
-  text-shadow:0 2px 7px rgba(152,33,63,0.16);
+  bottom:-8vh;
+  color:rgba(199,58,93,0.62);
+  text-shadow:0 2px 8px rgba(152,33,63,0.12);
+  transform-origin:center;
   animation-name:loadingHeartFloat;
-  animation-timing-function:ease-in;
+  animation-timing-function:ease-in-out;
   animation-iteration-count:infinite;
+  opacity:0;
 }
 .loading-heart.sm{font-size:14px}
 .loading-heart.md{font-size:18px}
 .loading-heart.lg{font-size:24px}
 @keyframes coverLoadingFill{
-  from{width:0}
-  to{width:100%}
+  0%{width:0}
+  60%{width:76%}
+  85%{width:92%}
+  100%{width:100%}
+}
+
+@keyframes gradientShift{
+  0%{background-position:0% 50%}
+  100%{background-position:100% 50%}
 }
 @keyframes loadingHeartFloat{
-  0%{transform:translate3d(0,0,0) scale(0.9);opacity:0}
-  20%{opacity:1}
+  0%{transform:translate3d(0,0,0) scale(0.75);opacity:0}
+  15%{opacity:1;transform:translate3d(0,-6vh,0) scale(0.9)}
+  50%{transform:translate3d(6vw,-48vh,0) scale(1)}
+  85%{opacity:0.6}
   100%{transform:translate3d(0,-120vh,0) scale(1.2);opacity:0}
+}
+
+@keyframes cardFloatIn{
+  0%{opacity:0;transform:translateY(12px) scale(.98)}
+  60%{opacity:1;transform:translateY(0) scale(1.01)}
+  100%{opacity:1;transform:translateY(-2px) scale(1)}
+}
+
+@keyframes cardFloat{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+  100%{transform:translateY(0)}
+}
+
+@keyframes loaderTextIn{
+  0%{opacity:0;transform:translateY(6px)}
+  100%{opacity:1;transform:translateY(0)}
+}
+
+@keyframes ringSpin{
+  0%{transform:rotate(0deg)}
+  100%{transform:rotate(360deg)}
+}
+
+@keyframes twinkle{
+  0%{opacity:0;transform:scale(.8)}
+  50%{opacity:1;transform:scale(1.05)}
+  100%{opacity:0;transform:scale(.85)}
 }
 @media (max-width:980px){
   .closed-invitation{min-height:min(84vh,760px)}
   .cover-inner{width:min(90%,500px)}
   .cover-tagline{margin-bottom:18px}
+  .cover-loading-card{padding:26px 18px}
 }
 @media (max-width:900px){
   .letter-envelope__seal{width:78px;height:78px}

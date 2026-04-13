@@ -36,21 +36,17 @@ export default function GalleryHighlights({ galleryAssets = [], openLightbox = (
         ))}
       </div>
 
-      <div className="photo-grid masonry">
-        {remaining.length ? (
-          remaining.map((src, i) => (
-            // i is index within remaining; add offset to match original gallery index
-            <button
-              key={i + CAROUSEL_COUNT + HIGHLIGHTS_COUNT}
-              className="gallery-item"
-              onClick={() => openLightbox(i + CAROUSEL_COUNT + HIGHLIGHTS_COUNT)}
-              aria-label={`Open image ${i + 1 + CAROUSEL_COUNT + HIGHLIGHTS_COUNT}`}
-            >
-              <img data-src={src} alt={`gallery-${i + CAROUSEL_COUNT + HIGHLIGHTS_COUNT}`} loading="lazy" />
-            </button>
-          ))
-        ) : null}
-      </div>
+      {remaining.length ? (
+        <div style={{ marginTop: 24 }}>
+          <h3 style={{ textAlign: 'center', marginBottom: 16, fontSize: '24px', fontFamily: 'var(--font-display)', letterSpacing: '0.05em' }}>More Moments</h3>
+          <Carousel 
+            images={remaining} 
+            onClick={(i) => openLightbox(i + CAROUSEL_COUNT + HIGHLIGHTS_COUNT)} 
+            autoplay 
+            delay={4000} 
+          />
+        </div>
+      ) : null}
     </section>
   )
 }
