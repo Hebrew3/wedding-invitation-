@@ -25,6 +25,7 @@ import photoAltOne from '../assets/DSC_7353.jpg'
 import photoAltTwo from '../assets/DSC_7365.jpg'
 import photoMilestone from '../assets/DSC_7675.jpg'
 import VideoPlayer from './VideoPlayer'
+import Quiz from './Quiz'
 
 export default function Sections() {
   // Load all images from the assets folder into the gallery.
@@ -243,7 +244,7 @@ export default function Sections() {
 
         <div className="cover-grid">
           <aside className="party-card program-sidebar">
-            {/* Left column: kept details box only; wedding party moved to its own section below */}
+            {/* Left column: details live here beside the cover photo */}
           </aside>
 
           <div className="cover-photo">
@@ -605,25 +606,7 @@ export default function Sections() {
       <section className="quiz fade-up">
         <div className="quiz-left">
           <h3>He Said, She Said</h3>
-          <p className="quiz-note">Guess whether the bride or groom made each statement.</p>
-          <div className="quiz-table-wrap">
-            <table className="quiz-table">
-              <thead>
-                <tr><th>Statement</th><th>Bride</th><th>Groom</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>I made the first move.</td><td>□</td><td>□</td></tr>
-                <tr><td>I wake up earlier.</td><td>□</td><td>□</td></tr>
-                <tr><td>I said &quot;I love you&quot; first.</td><td>□</td><td>□</td></tr>
-                <tr><td>I am the better cook.</td><td>□</td><td>□</td></tr>
-                <tr><td>I am more organized.</td><td>□</td><td>□</td></tr>
-                <tr><td>I am more adventurous.</td><td>□</td><td>□</td></tr>
-                 <tr><td>I spend more time on social media.</td><td>□</td><td>□</td></tr>
-                <tr><td>I am more likely to get lost while driving.</td><td>□</td><td>□</td></tr>
-                 <tr><td>I planned the first date.</td><td>□</td><td>□</td></tr>
-              </tbody>
-            </table>
-          </div>
+          <Quiz />
         </div>
         <div className="quiz-right photo-expandable">
           <img src={photoHeSaid} alt="Couple portrait by the wall" />

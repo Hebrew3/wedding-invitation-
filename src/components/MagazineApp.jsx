@@ -146,7 +146,7 @@ export default function MagazineApp() {
               </span>
             </div>
             <p className="cover-loading-text">
-              With love special guest, we invite you to celebrate!
+              with love, we invite you to celebrate with us!
             </p>
             <div className="cover-loading-bar" aria-hidden>
               <span className="cover-loading-bar__fill" />
