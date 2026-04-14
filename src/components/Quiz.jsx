@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 
 const STATEMENTS = [
   'I made the first move.',
@@ -29,54 +29,33 @@ function storageSet(key, value) {
 }
 
 export default function Quiz() {
-  // answers: { q1: 'bride'|'groom'|null, ... }
   const [answers, setAnswers] = useState(() => {
     const initial = {}
     STATEMENTS.forEach((_, idx) => {
       const k = `q${idx + 1}`
-      const v = storageGet(k)
-      initial[k] = v || null
+      initial[k] = storageGet(k) || null
     })
     return initial
   })
 
-  // locked rows: true if an answer exists
-  const locked = {}
-  STATEMENTS.forEach((_, idx) => {
-    const k = `q${idx + 1}`
-    locked[k] = !!answers[k]
-  })
-
-  useEffect(() => {
-    // ensure state reflects storage on mount (in case of cross-tab changes)
-    const fresh = {}
-    STATEMENTS.forEach((_, idx) => {
-      const k = `q${idx + 1}`
-      fresh[k] = storageGet(k) || null
-    })
-    setAnswers(() => ({ ...fresh }))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  function handleSelect(index, choice) {
-    const key = `q${index + 1}`
-    // If already locked, ignore
-    if (answers[key]) return
-    // Save and lock
-    storageSet(key, choice)
-    setAnswers((prev) => ({ ...prev, [key]: choice }))
-  }
-
-  // Totals: count how many 'bride' and 'groom' selections exist (per device)
-  const totals = useMemo(() => {
+  const localTotals = useMemo(() => {
     let bride = 0
     let groom = 0
+    let answered = 0
     Object.values(answers).forEach((v) => {
       if (v === 'bride') bride += 1
       if (v === 'groom') groom += 1
+      if (v) answered += 1
     })
-    return { bride, groom }
+    return { bride, groom, answered }
   }, [answers])
+
+  function handleSelect(index, choice) {
+    const key = `q${index + 1}`
+    if (answers[key]) return // already locked on this device
+    storageSet(key, choice)
+    setAnswers((prev) => ({ ...prev, [key]: choice }))
+  }
 
   return (
     <section className="quiz-section" aria-labelledby="quiz-title">
@@ -85,14 +64,16 @@ export default function Quiz() {
 
         <div className="quiz-controls">
           <div className="quiz-totals" aria-live="polite">
-            <span className="quiz-total">Bride: {totals.bride}</span>
-            <span className="quiz-total">Groom: {totals.groom}</span>
-            <span className="quiz-total">Answered: {Object.values(answers).filter(Boolean).length}</span>
+            <span className="quiz-total">Bride: {localTotals.bride}</span>
+            <span className="quiz-total">Groom: {localTotals.groom}</span>
+            <span className="quiz-total">Answered: {localTotals.answered}</span>
           </div>
         </div>
 
         <table className="quiz-table" role="grid" aria-describedby="quiz-instructions">
-          <caption id="quiz-instructions" className="visually-hidden">Select one option per row. Selections are saved to your device and will be locked.</caption>
+          <caption id="quiz-instructions" className="visually-hidden">
+            Select one option per row. Selections are saved to your device and will be locked.
+          </caption>
           <thead>
             <tr>
               <th className="quiz-col-statement">Statement</th>
@@ -106,12 +87,7 @@ export default function Quiz() {
               const val = answers[key]
               const isLocked = !!val
               return (
-                <tr
-                  key={key}
-                  className={`quiz-row ${isLocked ? 'locked' : ''}`}
-                  tabIndex={0}
-                  aria-live="polite"
-                >
+                <tr key={key} className={`quiz-row ${isLocked ? 'locked' : ''}`} tabIndex={0} aria-live="polite">
                   <td className="quiz-statement">{text}</td>
                   <td className={`quiz-cell ${val === 'bride' ? 'selected' : ''}`}>
                     <label className="quiz-label">
@@ -146,3 +122,5 @@ export default function Quiz() {
     </section>
   )
 }
+ 
+
