@@ -521,7 +521,7 @@ export default function Sections() {
                 <h3>Some Facts About The Couple</h3>
                 <ul className="facts-list">
                   <li>They met again by chance at a gasoline station.</li>
-                  <li>The groom loves Starbucks strawberry frappe while the bride loves Mangrane plain fruit shake but they never say no to Avocadoria.</li>
+                  <li>The groom loves Starbucks strawberry frappe while the bride loves Mangrae plain fruit shake but they never say no to Avocadoria.</li>
                   <li>They had their first date in Pan Dy Shadd Cafe.</li>
                   <li>Their favorite trip together was in Baguio City.</li>
                   <li>The proposal happened in Mt. Gulugod Baboy, Cuenca, Batangas, June 07, 2025.</li>
